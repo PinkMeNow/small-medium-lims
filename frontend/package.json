@@ -23,6 +23,7 @@
     "framer-motion": "^12.40.0",
     "heroui-native-pro": "^1.0.0-beta.3",
     "i18next": "^26.3.0",
+    "lucide-react": "^1.17.0",
     "marked": "^18.0.4",
     "motion": "^12.40.0",
     "react": "^19.2.6",

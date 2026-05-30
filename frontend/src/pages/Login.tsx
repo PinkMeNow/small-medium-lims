@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Input, Card, CardBody } from '@heroui/react'
+import { Button, Card, CardContent, Input, Label, Spinner, TextField } from '@heroui/react'
+import { FlaskConical } from 'lucide-react'
 import { useAuthStore } from '../stores/auth.store'
 import { login } from '../api/auth.api'
 
@@ -30,45 +31,58 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-sm flex flex-col gap-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-semibold text-foreground tracking-tight">LIMS</h1>
-          <p className="text-sm text-muted mt-1">Laboratorijski informacijski sustav</p>
+
+        <div className="flex flex-col items-center gap-2">
+          <div className="p-3 rounded-xl bg-accent-soft text-accent">
+            <FlaskConical size={28} />
+          </div>
+          <h1 className="text-2xl font-semibold text-foreground tracking-tight">LIMS</h1>
+          <p className="text-sm text-muted">Laboratorijski informacijski sustav</p>
         </div>
 
         <Card>
-          <CardBody className="p-6">
+          <CardContent className="p-6">
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-              <Input
-                label="Email"
-                type="email"
-                value={email}
-                onValueChange={setEmail}
-                autoComplete="email"
-                isRequired
-                autoFocus
-              />
-              <Input
-                label="Lozinka"
-                type="password"
-                value={lozinka}
-                onValueChange={setLozinka}
-                autoComplete="current-password"
-                isRequired
-              />
+
+              <TextField value={email} onChange={setEmail}>
+                <Label className="text-sm font-medium text-foreground">Email</Label>
+                <Input
+                  type="email"
+                  autoComplete="email"
+                  autoFocus
+                  required
+                  className="mt-1"
+                />
+              </TextField>
+
+              <TextField value={lozinka} onChange={setLozinka}>
+                <Label className="text-sm font-medium text-foreground">Lozinka</Label>
+                <Input
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  className="mt-1"
+                />
+              </TextField>
+
               {greška && (
                 <p className="text-sm text-danger">{greška}</p>
               )}
+
               <Button
                 type="submit"
-                color="primary"
-                isLoading={učitava}
-                className="w-full mt-1"
+                variant="primary"
+                isDisabled={učitava}
+                fullWidth
+                className="mt-1"
               >
-                Prijava
+                {učitava ? <Spinner size="sm" /> : 'Prijava'}
               </Button>
+
             </form>
-          </CardBody>
+          </CardContent>
         </Card>
+
       </div>
     </div>
   )
