@@ -7,6 +7,7 @@ import AppShell from './components/layout/AppShell'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Uzorci from './pages/Uzorci'
+import Kemikalije from './pages/Kemikalije'
 
 const Placeholder = ({ naziv }: { naziv: string }) => (
   <div className="flex flex-col gap-2">
@@ -31,7 +32,7 @@ function App() {
       <Route element={<ProtectedRoute><AppShell /></ProtectedRoute>}>
         <Route path="/"             element={<Dashboard />} />
         <Route path="/uzorci"       element={<Uzorci />} />
-        <Route path="/kemikalije"   element={<Placeholder naziv="Kemikalije" />} />
+        <Route path="/kemikalije"   element={<Kemikalije />} />
         <Route path="/protokoli"    element={<Placeholder naziv="Protokoli" />} />
         <Route path="/izvještaji"   element={<Placeholder naziv="Izvještaji" />} />
         <Route path="/korisnici"    element={<Placeholder naziv="Korisnici" />} />
