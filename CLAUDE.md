@@ -284,8 +284,10 @@ VITE_API_URL=http://localhost:3001/api/v1
 
 **Separator** (replaces Divider):
 ```tsx
-<Separator className="my-2" />                    {/* horizontal */}
-<Separator orientation="vertical" className="h-4" /> {/* vertical */}
+<Separator className="my-2" />                         {/* horizontal, default */}
+<Separator variant="secondary" className="my-2" />     {/* stronger */}
+<Separator variant="tertiary" className="my-2" />      {/* strongest */}
+<Separator orientation="vertical" className="h-4" />   {/* vertical */}
 ```
 
 ---
