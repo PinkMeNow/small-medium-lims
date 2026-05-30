@@ -341,6 +341,30 @@ VITE_API_URL=http://localhost:3001/api/v1
 </TextField>
 ```
 
+**Modal — ModalContainer mora imati `position: fixed` (HeroUI v3 ne dodaje automatski):**
+```tsx
+<ModalRoot state={modal}>
+  <ModalBackdrop />
+  <ModalContainer
+    size="md"
+    className="fixed inset-0 z-50 flex items-center justify-center p-4"
+  >
+    <ModalDialog>
+      <ModalHeader>
+        <ModalHeading>Naslov</ModalHeading>
+        <ModalCloseTrigger asChild><CloseButton size="sm" /></ModalCloseTrigger>
+      </ModalHeader>
+      <ModalBody>...</ModalBody>
+      <ModalFooter className="gap-2">
+        <Button variant="outline" onClick={modal.close}>Odustani</Button>
+        <Button variant="primary" onClick={handleSubmit}>Spremi</Button>
+      </ModalFooter>
+    </ModalDialog>
+  </ModalContainer>
+</ModalRoot>
+```
+`useOverlayState()` vraća `{ open, close, toggle, isOpen }`.
+
 **Tooltip:**
 ```tsx
 <TooltipRoot>

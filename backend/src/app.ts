@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { authRouter } from './features/auth/auth.router'
+import { samplesRouter } from './features/samples/samples.router'
 import { errorMiddleware } from './middleware/error'
 import { env } from './lib/env'
 
@@ -19,5 +20,6 @@ app.get('/health', (_req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/samples', samplesRouter)
 
 app.use(errorMiddleware)
