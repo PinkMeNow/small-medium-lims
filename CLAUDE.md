@@ -250,6 +250,46 @@ VITE_API_URL=http://localhost:3001/api/v1
 
 ---
 
+## HeroUI v3 API — confirmed patterns
+
+**Package:** `@heroui/react@3.1.0` — completely redesigned API from v2.
+
+| v2 (old) | v3 (correct) | Notes |
+|---|---|---|
+| `HeroUIProvider` | *(removed)* | No provider needed |
+| `CardBody` | `CardContent` | Also: `CardHeader`, `CardFooter`, `CardTitle`, `CardDescription` |
+| `Divider` | `Separator` | Props: `orientation`, `variant`, `className` |
+| `Button color="primary"` | `Button variant="primary"` | Variants: `primary`, `secondary`, `tertiary`, `outline`, `ghost`, `danger` |
+| `Button onPress` | `Button onClick` | Standard DOM handler |
+| `Button isLoading` | *(removed)* | Wrap children: `{loading ? <Spinner size="sm" /> : 'Label'}` |
+| `Button startContent` | *(removed)* | Put icons directly in children |
+| `Input label="x" onValueChange` | `TextField` + `Label` + `Input` | React Aria compound — `TextField onChange` gives string directly |
+| `Tooltip content="x"` | `TooltipRoot` + `TooltipTrigger` + `TooltipContent` | Compound pattern |
+
+**Form fields (React Aria pattern):**
+```tsx
+<TextField value={val} onChange={setVal}>  {/* onChange: (s: string) => void */}
+  <Label>Naziv</Label>
+  <Input type="text" />
+</TextField>
+```
+
+**Tooltip:**
+```tsx
+<TooltipRoot>
+  <TooltipTrigger className="block">{triggerElement}</TooltipTrigger>
+  <TooltipContent side="right">Tekst</TooltipContent>
+</TooltipRoot>
+```
+
+**Separator** (replaces Divider):
+```tsx
+<Separator className="my-2" />                    {/* horizontal */}
+<Separator orientation="vertical" className="h-4" /> {/* vertical */}
+```
+
+---
+
 ## Design system
 
 Full token reference lives in [DESIGN.md](DESIGN.md). Key rules for writing UI code:
