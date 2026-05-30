@@ -1,3 +1,51 @@
 @import "tailwindcss";
 @import "@heroui/styles";
 @import "@heroui-pro/react/css";
+
+/*
+ * HeroUI Pro Theme
+ * @see https://heroui.com/docs/react/getting-started/theming
+ */
+:root,
+.light,
+.default,
+[data-theme="light"],
+[data-theme="default"] {
+  /* Theme Colors */
+  --background: oklch(97.02% 0.0055 248.08);
+  --muted: oklch(55.17% 0.0110 248.08);
+  --scrollbar: oklch(87.10% 0.0055 248.08);
+  --surface-secondary: oklch(95.24% 0.0083 248.08);
+  --surface-tertiary: oklch(93.73% 0.0083 248.08);
+  --default: oklch(94.00% 0.0055 248.08);
+  --accent: oklch(56.93% 0.1536 248.08);
+  --field-border: oklch(90.00% 0.0055 248.08);
+  --border: oklch(90.00% 0.0055 248.08);
+  --separator: oklch(92.00% 0.0055 248.08);
+
+  /* Font */
+  --font-sans: var(--font-figtree);
+}
+
+.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+  /* Theme Colors */
+  --background: oklch(12.00% 0.0055 248.08);
+  --muted: oklch(70.50% 0.0110 248.08);
+  --scrollbar: oklch(70.50% 0.0055 248.08);
+  --surface: oklch(21.03% 0.0110 248.08);
+  --surface-secondary: oklch(25.70% 0.0083 248.08);
+  --surface-secondary-foreground: oklch(25.70% 0.0000 248.08);
+  --surface-tertiary: oklch(27.21% 0.0083 248.08);
+  --surface-tertiary-foreground: oklch(27.21% 0.0000 248.08);
+  --overlay: oklch(21.03% 0.0110 248.08);
+  --default: oklch(27.40% 0.0055 248.08);
+  --accent: oklch(56.93% 0.1536 248.08);
+  --field-background: oklch(21.03% 0.0110 248.08);
+  --field-placeholder: oklch(70.50% 0.0000 248.08);
+  --field-border: oklch(28.00% 0.0055 248.08);
+  --segment: oklch(39.64% 0.0055 248.08);
+  --border: oklch(28.00% 0.0055 248.08);
+  --separator: oklch(25.00% 0.0055 248.08);
+}

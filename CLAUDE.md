@@ -250,6 +250,19 @@ VITE_API_URL=http://localhost:3001/api/v1
 
 ---
 
+## Design system
+
+Full token reference lives in [DESIGN.md](DESIGN.md). Key rules for writing UI code:
+
+- **Font:** Figtree (loaded via Google Fonts in `index.html`). Inter is also loaded as a secondary option.
+- **Colors:** Always use semantic tokens — `bg-background`, `text-foreground`, `text-muted`, `bg-surface`, `bg-accent`, `text-danger`, etc. Never put raw hex in component code.
+- **Accent:** `#007BCC` (oklch `56.93% 0.1536 248.08`) — primary brand blue used for key actions and chart-3.
+- **Spacing:** 4px base unit. Stick to the 4/8px rhythm using Tailwind utilities (`gap-4`, `p-6`, `space-y-2`).
+- **Radius:** `rounded-lg` (8px) for surfaces/buttons, `rounded-xl` (12px) for form fields.
+- **Elevation:** Use HeroUI's built-in surface/overlay shadows — do not add custom box-shadow on top of Card or Modal.
+- **Charts:** Use `--chart-1` through `--chart-5` for series colors (blue ramp, chart-3 = accent).
+- **Dark mode:** HeroUI handles it via `[data-theme="dark"]`. Toggle via `HeroUIProvider` — no manual color branching in components.
+
 ## Code conventions
 
 - **No comments** unless WHY is non-obvious
