@@ -250,6 +250,73 @@ VITE_API_URL=http://localhost:3001/api/v1
 
 ---
 
+## HeroUI v3 setup (confirmed)
+
+**Requirements:** React 19+, Tailwind CSS v4. No `HeroUIProvider` needed.
+
+**CSS import order (matters):**
+```css
+@import "tailwindcss";     /* must be first */
+@import "@heroui/styles";
+@import "@heroui-pro/react/css";  /* Pro only */
+```
+
+**Tailwind content paths required:**
+```ts
+'./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}',
+'./node_modules/@heroui-pro/react/dist/**/*.{js,ts,jsx,tsx}',
+```
+
+---
+
+## HeroUI v3 free components (confirmed available in @heroui/react@3.1.0)
+
+**Buttons**
+`Button`, `ButtonGroup`, `CloseButton`, `ToggleButton`, `ToggleButtonGroup`
+
+**Forms & Inputs**
+`TextField`, `Input`, `InputGroup`, `TextArea`, `NumberField`, `SearchField`
+`Select`, `ComboBox`, `Autocomplete`
+`Checkbox`, `CheckboxGroup`, `Radio`, `RadioGroup`, `Switch`, `SwitchGroup`
+`Slider`, `InputOTP`
+`ColorField`, `ColorPicker`, `ColorArea`, `ColorSlider`, `ColorSwatchPicker`, `ColorSwatch`
+`Label`, `FieldError`, `Description`, `Form`, `Fieldset`
+
+**Date & Time**
+`DateField`, `DatePicker`, `DateRangePicker`, `TimeField`, `Calendar`, `RangeCalendar`
+
+**Layout & Structure**
+`Card` (`CardRoot`, `CardHeader`, `CardContent`, `CardFooter`, `CardTitle`, `CardDescription`)
+`Surface`, `Separator`, `ScrollShadow`, `Header`, `Toolbar`
+
+**Navigation**
+`Breadcrumbs`, `Tabs` (`Tab`, `TabList`, `TabPanel`, `TabIndicator`), `Pagination`
+
+**Overlays**
+`Modal` (`ModalRoot`, `ModalTrigger`, `ModalBody`, `ModalHeader`, `ModalFooter`, `ModalCloseTrigger`)
+`AlertDialog`, `Drawer`, `Popover`, `Tooltip` (`TooltipRoot`, `TooltipTrigger`, `TooltipContent`)
+`Dropdown` (`DropdownRoot`, `DropdownTrigger`, `DropdownMenu`, `DropdownItem`, `DropdownSection`)
+`Menu` (`MenuRoot`, `MenuSection`, `MenuItem`)
+
+**Data Display**
+`Avatar`, `Badge`, `Chip`, `Code`, `Kbd`
+`Accordion`, `Disclosure`, `DisclosureGroup`
+`Table` (`TableRoot`, `TableHeader`, `TableBody`, `TableRow`, `TableColumn`, `TableCell`, `TableFooter`)
+`ListBox` (`ListBoxItem`, `ListBoxSection`)
+`EmptyState`
+
+**Feedback**
+`Alert`, `Spinner`, `Skeleton`, `Toast` (`ToastProvider`, `ToastQueue`)
+`ProgressBar`, `ProgressCircle`, `Meter`
+
+**Typography**
+`Typography`, `Prose`, `Heading`, `Paragraph`, `Link`
+
+**Utilities**
+`Tag`, `TagGroup`, `Virtualizer`
+
+---
+
 ## HeroUI v3 API — confirmed patterns
 
 **Package:** `@heroui/react@3.1.0` — completely redesigned API from v2.
