@@ -6,7 +6,7 @@ import {
   SearchField, SearchFieldGroup, SearchFieldSearchIcon, SearchFieldInput, SearchFieldClearButton,
   TableRoot, TableContent, TableHeader, TableBody, TableRow, TableColumn, TableCell,
 } from '@heroui/react'
-import { ChevronLeft, ChevronRight, ArrowUpDown } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Info } from 'lucide-react'
 import { useSamples, useUpdateSampleStatus } from './hooks'
 import SampleStatusBadge from './SampleStatusBadge'
 import { SAMPLE_STATUS_LABELS, ALLOWED_TRANSITIONS } from '../../types/samples'
@@ -126,18 +126,14 @@ export default function SamplesTable({ onRowClick }: Props) {
                 <TableColumn id="status" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Status</TableColumn>
                 <TableColumn id="receivedBy" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Zaprimio/la</TableColumn>
                 <TableColumn id="receivedAt" allowsSorting className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Zaprimljeno</TableColumn>
+                <TableColumn id="detail" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider"></TableColumn>
                 <TableColumn id="actions" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Akcija</TableColumn>
               </TableHeader>
               <TableBody>
                 {sortedData.map((sample) => {
                   const nextStatuses = ALLOWED_TRANSITIONS[sample.status]
                   return (
-                    <TableRow
-                      key={sample.id}
-                      id={sample.id}
-                      className="cursor-pointer"
-                      onClick={() => onRowClick?.(sample)}
-                    >
+                    <TableRow key={sample.id} id={sample.id}>
                       <TableCell className="px-4 py-3 font-mono font-medium text-foreground">{sample.code}</TableCell>
                       <TableCell className="px-4 py-3 text-foreground">{sample.type}</TableCell>
                       <TableCell className="px-4 py-3 text-muted max-w-48 truncate">{sample.source}</TableCell>
@@ -147,6 +143,11 @@ export default function SamplesTable({ onRowClick }: Props) {
                       </TableCell>
                       <TableCell className="px-4 py-3 text-muted whitespace-nowrap text-sm">
                         {format(new Date(sample.receivedAt), 'd. MMM yyyy.', { locale: hr })}
+                      </TableCell>
+                      <TableCell className="px-4 py-3">
+                        <Button variant="ghost" size="sm" isIconOnly title="Detalji" onClick={() => onRowClick?.(sample)}>
+                          <Info size={16} className="text-muted" />
+                        </Button>
                       </TableCell>
                       <TableCell className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                         {nextStatuses.length > 0 && (

@@ -1,7 +1,12 @@
+import { useState } from 'react'
 import SamplesTable from '../features/samples/SamplesTable'
 import SampleForm from '../features/samples/SampleForm'
+import SampleDetailModal from '../features/samples/SampleDetailModal'
+import type { Sample } from '../types/samples'
 
 export default function Uzorci() {
+  const [selectedSample, setSelectedSample] = useState<Sample | null>(null)
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
@@ -12,7 +17,12 @@ export default function Uzorci() {
         <SampleForm />
       </div>
 
-      <SamplesTable />
+      <SamplesTable onRowClick={setSelectedSample} />
+
+      <SampleDetailModal
+        sample={selectedSample}
+        onClose={() => setSelectedSample(null)}
+      />
     </div>
   )
 }
