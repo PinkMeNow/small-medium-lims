@@ -14,12 +14,24 @@ const queryClient = new QueryClient({
   },
 })
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter>
-      <QueryClientProvider client={queryClient}>
-        <App />
-      </QueryClientProvider>
-    </BrowserRouter>
-  </StrictMode>,
-)
+async function bootstrap() {
+  if (import.meta.env.DEV) {
+    const { worker } = await import('./mocks/browser')
+    await worker.start({
+      onUnhandledRequest: 'bypass',
+      serviceWorker: { url: '/mockServiceWorker.js' },
+    })
+  }
+
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <BrowserRouter>
+        <QueryClientProvider client={queryClient}>
+          <App />
+        </QueryClientProvider>
+      </BrowserRouter>
+    </StrictMode>,
+  )
+}
+
+bootstrap()
