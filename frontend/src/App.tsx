@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard'
 import Uzorci from './pages/Uzorci'
 import Kemikalije from './pages/Kemikalije'
 import Protokoli from './pages/Protokoli'
+import Izvještaji from './pages/Izvještaji'
 
 const Placeholder = ({ naziv }: { naziv: string }) => (
   <div className="flex flex-col gap-2">
@@ -35,7 +36,7 @@ function App() {
         <Route path="/uzorci"       element={<Uzorci />} />
         <Route path="/kemikalije"   element={<Kemikalije />} />
         <Route path="/protokoli"    element={<Protokoli />} />
-        <Route path="/izvještaji"   element={<Placeholder naziv="Izvještaji" />} />
+        <Route path="/izvještaji"   element={<Izvještaji />} />
         <Route path="/korisnici"    element={<Placeholder naziv="Korisnici" />} />
       </Route>
 
