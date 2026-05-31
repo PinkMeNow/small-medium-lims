@@ -16,7 +16,7 @@ const NAV = [
   { href: '/uzorci',     icon: FlaskConical,    label: 'Uzorci' },
   { href: '/kemikalije', icon: Beaker,          label: 'Kemikalije' },
   { href: '/protokoli',  icon: ClipboardList,   label: 'Protokoli' },
-  { href: '/izvještaji', icon: BarChart3,       label: 'Izvještaji' },
+  { href: '/izvještaji', icon: BarChart3,        label: 'Izvještaji' },
 ]
 
 const ADMIN_NAV = [
@@ -26,6 +26,8 @@ const ADMIN_NAV = [
 interface Props {
   collapsed: boolean
   onToggle: () => void
+  isMobile?: boolean
+  onMobileClose?: () => void
 }
 
 interface NavItemProps {
@@ -34,13 +36,15 @@ interface NavItemProps {
   label: string
   end?: boolean
   collapsed: boolean
+  onMobileClose?: () => void
 }
 
-function NavItem({ href, icon: Icon, label, end, collapsed }: NavItemProps) {
+function NavItem({ href, icon: Icon, label, end, collapsed, onMobileClose }: NavItemProps) {
   const link = (
     <NavLink
       to={href}
       end={end}
+      onClick={onMobileClose}
       className={({ isActive }) =>
         [
           'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-sm font-medium',
@@ -67,48 +71,50 @@ function NavItem({ href, icon: Icon, label, end, collapsed }: NavItemProps) {
   return link
 }
 
-export default function Sidebar({ collapsed, onToggle }: Props) {
+export default function Sidebar({ collapsed, onToggle, isMobile, onMobileClose }: Props) {
   const { user, clearAuth } = useAuthStore()
   const navigate = useNavigate()
 
   async function handleLogout() {
-    try { await logout() } catch { /* ignore network errors */ }
+    try { await logout() } catch { /* ignore */ }
     clearAuth()
     navigate('/prijava', { replace: true })
   }
+
+  const effectiveCollapsed = isMobile ? false : collapsed
 
   return (
     <aside
       className={[
         'flex flex-col h-screen bg-surface border-r border-border shrink-0',
         'transition-all duration-200 overflow-hidden',
-        collapsed ? 'w-16' : 'w-60',
+        effectiveCollapsed ? 'w-16' : 'w-64',
       ].join(' ')}
     >
       {/* Brand */}
-      <div className={['flex items-center h-14 border-b border-border shrink-0 px-3 gap-2', collapsed ? 'justify-center' : ''].join(' ')}>
+      <div className={['flex items-center h-14 border-b border-border shrink-0 px-4 gap-2', effectiveCollapsed ? 'justify-center' : ''].join(' ')}>
         <FlaskConical size={20} className="text-accent shrink-0" />
-        {!collapsed && <span className="font-semibold text-foreground text-base tracking-tight">LIMS</span>}
+        {!effectiveCollapsed && <span className="font-semibold text-foreground text-base tracking-tight">LIMS</span>}
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-2 flex flex-col gap-0.5">
         {NAV.map((item) => (
-          <NavItem key={item.href} {...item} collapsed={collapsed} />
+          <NavItem key={item.href} {...item} collapsed={effectiveCollapsed} onMobileClose={onMobileClose} />
         ))}
 
         {user?.role === 'admin' && (
           <>
             <Separator className="my-2" />
             {ADMIN_NAV.map((item) => (
-              <NavItem key={item.href} {...item} collapsed={collapsed} />
+              <NavItem key={item.href} {...item} collapsed={effectiveCollapsed} onMobileClose={onMobileClose} />
             ))}
           </>
         )}
       </nav>
 
       {/* User info */}
-      {!collapsed && user && (
+      {!effectiveCollapsed && user && (
         <div className="px-4 py-3 border-t border-border shrink-0">
           <p className="text-sm font-medium text-foreground truncate">
             {user.firstName} {user.lastName}
@@ -117,30 +123,33 @@ export default function Sidebar({ collapsed, onToggle }: Props) {
         </div>
       )}
 
-      {/* Logout */}
+      {/* Logout + collapse */}
       <div className="border-t border-border p-2 shrink-0 flex flex-col gap-1">
         <Button
           variant="ghost"
           size="sm"
-          isIconOnly={collapsed}
-          className={['w-full text-danger', collapsed ? '' : 'justify-start gap-2'].join(' ')}
+          isIconOnly={effectiveCollapsed}
+          className={['w-full text-danger', effectiveCollapsed ? '' : 'justify-start gap-2'].join(' ')}
           onClick={handleLogout}
           aria-label="Odjava"
         >
           <LogOut size={16} />
-          {!collapsed && 'Odjava'}
+          {!effectiveCollapsed && 'Odjava'}
         </Button>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          isIconOnly
-          className="w-full"
-          onClick={onToggle}
-          aria-label={collapsed ? 'Proširi izbornik' : 'Sažmi izbornik'}
-        >
-          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-        </Button>
+        {/* Collapse toggle — desktop only */}
+        {!isMobile && (
+          <Button
+            variant="ghost"
+            size="sm"
+            isIconOnly
+            className="w-full"
+            onClick={onToggle}
+            aria-label={collapsed ? 'Proširi izbornik' : 'Sažmi izbornik'}
+          >
+            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          </Button>
+        )}
       </div>
     </aside>
   )

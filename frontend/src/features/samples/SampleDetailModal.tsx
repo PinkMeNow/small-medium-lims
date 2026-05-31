@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+﻿import { useRef, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
   Button, Spinner, Chip, Separator,
@@ -55,14 +55,11 @@ export default function SampleDetailModal({ sample, onClose }: Props) {
     if (!win || !sample) return
     win.document.write(`
       <html><head><title>Naljepnica — ${sample.code}</title>
-      <style>body{font-family:monospace;text-align:center;padding:20px}
-      h2{font-size:18px;margin:8px 0}p{font-size:12px;margin:4px 0;color:#555}</style></head>
-      <body>
-        ${printRef.current?.innerHTML ?? ''}
-        <h2>${sample.code}</h2>
-        <p>${sample.type} — ${sample.source}</p>
-        <p>${format(new Date(sample.receivedAt), 'd. MMM yyyy.', { locale: hr })}</p>
-      </body></html>
+      <style>
+        body{font-family:monospace;text-align:center;padding:24px;background:#fff}
+        @media print{@page{margin:10mm}}
+      </style></head>
+      <body>${printRef.current?.innerHTML ?? ''}</body></html>
     `)
     win.document.close()
     win.print()
@@ -74,7 +71,7 @@ export default function SampleDetailModal({ sample, onClose }: Props) {
   return (
     <ModalRoot state={modal}>
       <ModalBackdrop />
-      <ModalContainer size="lg" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <ModalContainer size="lg" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
         <ModalDialog className="w-full max-w-2xl">
           <ModalHeader className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -86,9 +83,9 @@ export default function SampleDetailModal({ sample, onClose }: Props) {
             <ModalCloseTrigger asChild onClick={handleClose}><CloseButton size="sm" /></ModalCloseTrigger>
           </ModalHeader>
 
-          <ModalBody className="overflow-y-auto max-h-[70vh] flex flex-col gap-5 py-4">
+          <ModalBody className="overflow-y-auto max-h-[85vh] sm:max-h-[70vh] flex flex-col gap-5 py-4">
             {/* Info + QR */}
-            <div className="flex gap-6">
+            <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
               <div className="flex-1 grid grid-cols-2 gap-3">
                 {[
                   { label: 'Vrsta', value: sample.type },
@@ -109,10 +106,23 @@ export default function SampleDetailModal({ sample, onClose }: Props) {
                 )}
               </div>
 
-              {/* QR code */}
+              {/* QR code naljepnica */}
               <div className="flex flex-col items-center gap-2 shrink-0">
-                <div ref={printRef} className="p-3 bg-white rounded-xl border border-border">
-                  <QRCode value={sample.code} size={100} />
+                <div
+                  ref={printRef}
+                  className="p-3 bg-white rounded-xl border border-border flex flex-col items-center gap-1.5"
+                  style={{ fontFamily: 'monospace' }}
+                >
+                  <QRCode value={sample.code} size={96} />
+                  <p style={{ color: '#000', fontWeight: 700, fontSize: 13, margin: 0, letterSpacing: 1 }}>
+                    {sample.code}
+                  </p>
+                  <p style={{ color: '#555', fontSize: 10, margin: 0 }}>
+                    {sample.type}
+                  </p>
+                  <p style={{ color: '#888', fontSize: 9, margin: 0 }}>
+                    {format(new Date(sample.receivedAt), 'dd.MM.yyyy', { locale: hr })}
+                  </p>
                 </div>
                 <Button variant="outline" size="sm" onClick={handlePrint}>
                   <Printer size={14} /> Ispiši

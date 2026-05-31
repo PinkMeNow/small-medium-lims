@@ -9,6 +9,7 @@ function readCollapsed() {
 
 export default function AppShell() {
   const [collapsed, setCollapsed] = useState(readCollapsed)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   function toggle() {
     setCollapsed((prev) => {
@@ -18,12 +19,37 @@ export default function AppShell() {
     })
   }
 
+  function closeMobile() { setMobileOpen(false) }
+
   return (
     <div className="flex h-screen bg-background overflow-hidden">
-      <Sidebar collapsed={collapsed} onToggle={toggle} />
+      {/* Desktop sidebar — always visible */}
+      <div className="hidden lg:flex shrink-0">
+        <Sidebar collapsed={collapsed} onToggle={toggle} />
+      </div>
+
+      {/* Mobile sidebar backdrop */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={closeMobile}
+        />
+      )}
+
+      {/* Mobile sidebar drawer */}
+      <div
+        className={[
+          'fixed inset-y-0 left-0 z-50 lg:hidden transition-transform duration-200 ease-in-out shrink-0',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full',
+        ].join(' ')}
+      >
+        <Sidebar collapsed={false} onToggle={closeMobile} isMobile onMobileClose={closeMobile} />
+      </div>
+
+      {/* Main content */}
       <div className="flex flex-col flex-1 min-w-0">
-        <Header />
-        <main className="flex-1 overflow-auto p-6">
+        <Header onMenuClick={() => setMobileOpen((o) => !o)} />
+        <main className="flex-1 overflow-auto p-4 md:p-6">
           <Outlet />
         </main>
       </div>

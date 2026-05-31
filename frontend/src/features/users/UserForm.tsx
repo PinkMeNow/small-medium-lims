@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import {
   Button, Spinner, Chip,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
@@ -50,7 +50,7 @@ export default function UserForm() {
 
       <ModalRoot state={modal}>
         <ModalBackdrop />
-        <ModalContainer size="md" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <ModalContainer size="md" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
           <ModalDialog>
             <ModalHeader className="flex items-center justify-between">
               <ModalHeading>Novi korisnik</ModalHeading>

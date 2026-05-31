@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import ChemicalsTable from '../features/chemicals/ChemicalsTable'
 import ChemicalForm from '../features/chemicals/ChemicalForm'
 import ChemicalQuantityModal from '../features/chemicals/ChemicalQuantityModal'
@@ -9,7 +9,7 @@ export default function Kemikalije() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold text-foreground">Kemikalije</h1>
           <p className="text-sm text-muted mt-1">Inventar reagensa i kemikalija</p>

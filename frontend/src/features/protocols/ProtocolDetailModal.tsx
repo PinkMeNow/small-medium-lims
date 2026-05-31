@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
   Button, Spinner, Chip, Separator,
@@ -34,7 +34,7 @@ export default function ProtocolDetailModal({ protocol, onClose }: Props) {
   return (
     <ModalRoot state={modal}>
       <ModalBackdrop />
-      <ModalContainer size="lg" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <ModalContainer size="lg" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
         <ModalDialog className="w-full max-w-2xl">
           <ModalHeader className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">

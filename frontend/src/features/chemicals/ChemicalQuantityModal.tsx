@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
@@ -51,7 +51,7 @@ export default function ChemicalQuantityModal({ chemical, onClose }: Props) {
   return (
     <ModalRoot state={modal}>
       <ModalBackdrop />
-      <ModalContainer size="sm" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <ModalContainer size="sm" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
         <ModalDialog>
           <ModalHeader className="flex items-center justify-between">
             <ModalHeading>Ažuriraj količinu</ModalHeading>
