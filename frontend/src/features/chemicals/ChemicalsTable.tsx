@@ -6,7 +6,7 @@ import {
   SearchField, SearchFieldGroup, SearchFieldSearchIcon, SearchFieldInput, SearchFieldClearButton,
   TableRoot, TableContent, TableHeader, TableBody, TableRow, TableColumn, TableCell,
 } from '@heroui/react'
-import { ChevronLeft, ChevronRight, ExternalLink, Trash2 } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ExternalLink, Trash2, FlaskConical } from 'lucide-react'
 import { useChemicals } from './hooks'
 import GHSBadge from './GHSBadge'
 import ChemicalStatusBadge from './ChemicalStatusBadge'
@@ -26,7 +26,9 @@ const ALERT_OPTIONS = [
   { id: 'low_stock', label: 'Niske zalihe' },
 ]
 
-export default function ChemicalsTable() {
+interface Props { onUpdateQuantity?: (c: Chemical) => void }
+
+export default function ChemicalsTable({ onUpdateQuantity }: Props) {
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState('')
   const [alert, setAlert] = useState('')
@@ -156,11 +158,20 @@ export default function ChemicalsTable() {
                       </TableCell>
                       <TableCell className="px-4 py-3"><ChemicalStatusBadge status={status} /></TableCell>
                       <TableCell className="px-4 py-3">
-                        {c.sdsUrl && (
-                          <a href={c.sdsUrl} target="_blank" rel="noreferrer" className="text-accent hover:text-accent-hover" title="Otvori SDS">
-                            <ExternalLink size={14} />
-                          </a>
-                        )}
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost" size="sm" isIconOnly
+                            title="Ažuriraj količinu"
+                            onClick={() => onUpdateQuantity?.(c)}
+                          >
+                            <FlaskConical size={15} className="text-muted" />
+                          </Button>
+                          {c.sdsUrl && (
+                            <a href={c.sdsUrl} target="_blank" rel="noreferrer" className="text-accent hover:text-accent-hover" title="Otvori SDS">
+                              <ExternalLink size={14} />
+                            </a>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   )

@@ -4,16 +4,19 @@ import {
   SearchField, SearchFieldGroup, SearchFieldSearchIcon, SearchFieldInput, SearchFieldClearButton,
   TableRoot, TableContent, TableHeader, TableBody, TableRow, TableColumn, TableCell,
 } from '@heroui/react'
-import { ChevronLeft, ChevronRight, FlaskConical, Tag } from 'lucide-react'
+import { ChevronLeft, ChevronRight, FlaskConical, Tag, Info } from 'lucide-react'
 import { useProtocols } from './hooks'
 import { format } from 'date-fns'
 import { hr } from 'date-fns/locale'
 import type { Protocol } from '../../types/protocols'
 
 interface SortDescriptor { column: string; direction: 'ascending' | 'descending' }
-interface Props { onRunExperiment?: (protocol: Protocol) => void }
+interface Props {
+  onRunExperiment?: (protocol: Protocol) => void
+  onViewDetail?: (protocol: Protocol) => void
+}
 
-export default function ProtocolsTable({ onRunExperiment }: Props) {
+export default function ProtocolsTable({ onRunExperiment, onViewDetail }: Props) {
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -73,6 +76,7 @@ export default function ProtocolsTable({ onRunExperiment }: Props) {
                 <TableColumn id="experimentCount" allowsSorting className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider text-center">Eksperimenti</TableColumn>
                 <TableColumn id="createdBy" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Kreirao/la</TableColumn>
                 <TableColumn id="createdAt" allowsSorting className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Kreirano</TableColumn>
+                <TableColumn id="detail" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider"></TableColumn>
                 <TableColumn id="actions" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider"></TableColumn>
               </TableHeader>
               <TableBody>
@@ -103,6 +107,11 @@ export default function ProtocolsTable({ onRunExperiment }: Props) {
                     </TableCell>
                     <TableCell className="px-4 py-3 text-muted text-xs whitespace-nowrap">
                       {format(new Date(p.createdAt), 'd. MMM yyyy.', { locale: hr })}
+                    </TableCell>
+                    <TableCell className="px-4 py-3">
+                      <Button variant="ghost" size="sm" isIconOnly title="Pogledaj korake" onClick={() => onViewDetail?.(p)}>
+                        <Info size={16} className="text-muted" />
+                      </Button>
                     </TableCell>
                     <TableCell className="px-4 py-3">
                       <Button variant="outline" size="sm" onClick={() => onRunExperiment?.(p)}>Pokreni</Button>

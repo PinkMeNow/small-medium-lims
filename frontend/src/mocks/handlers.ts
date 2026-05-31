@@ -202,7 +202,7 @@ export const handlers = [
     await delay(200)
     const p = MOCK_PROTOCOLS.find(x => x.id === params.id)
     if (!p) return HttpResponse.json({ error: { code: 'NIJE_PRONAĐENO', message: 'Protokol nije pronađen.' } }, { status: 404 })
-    return HttpResponse.json({ protocol: p, versions: [], experiments: experiments.filter(e => e.protocolId === p.id) })
+    return HttpResponse.json({ protocol: p, versions: MOCK_PROTOCOL_VERSIONS[p.id] ?? [], experiments: experiments.filter(e => e.protocolId === p.id) })
   }),
 
   http.post(`${BASE}/protocols`, async ({ request }) => {
@@ -394,3 +394,34 @@ let mockUsers: AppUser[] = [
   { id: 'user-1', firstName: 'Ana', lastName: 'Kovač', email: 'ana@lims.hr', role: 'lab_technician', isActive: true, createdAt: '2025-01-15T10:00:00Z', updatedAt: '2025-01-15T10:00:00Z' },
   { id: 'user-3', firstName: 'Petra', lastName: 'Šimić', email: 'petra@lims.hr', role: 'viewer', isActive: true, createdAt: '2025-02-01T09:00:00Z', updatedAt: '2025-02-01T09:00:00Z' },
 ]
+
+// Mock protocol versions with actual steps
+const MOCK_PROTOCOL_VERSIONS: Record<string, any[]> = {
+  'prot-1': [{
+    id: 'pv-1a', protocolId: 'prot-1', version: '1.1.0',
+    steps: [
+      { stepNumber: 1, title: 'Kalibracija pH elektrode', description: 'Kalibrirati pH elektrodu s certificiranim puferima pH 4.00 i pH 7.00 na temperaturi 25°C ± 0.5°C. Isprati elektrodu destiliranom vodom između pufera.' },
+      { stepNumber: 2, title: 'Kondicioniranje uzorka', description: 'Uzorak temperirati na 25°C ± 0.5°C u termostatu. Izmjeriti temperaturu uzorka termometrom i evidentirati u protokolnom listu.' },
+      { stepNumber: 3, title: 'Mjerenje pH vrijednosti', description: 'Uroniti elektrodu u uzorak (dubina min. 3 cm). Pričekati stabilizaciju očitanja (promjena < 0.01 pH/min). Očitati i evidentirati pH vrijednost.' },
+      { stepNumber: 4, title: 'Ispiranje i pohrana', description: 'Isprati elektrodu destiliranom vodom. Pohraniti elektrodu u pufer pH 7.00 ili KCl otopinu prema uputama proizvođača.' },
+    ],
+    requiredMaterials: ['Pufer pH 4.00 (certificiran)', 'Pufer pH 7.00 (certificiran)', 'Destilirana voda', 'KCl otopina za pohranu'],
+    requiredEquipment: ['pH metar (rezolucija 0.01 pH)', 'Termometar', 'Termostat', 'Čaše 100 mL'],
+    expectedResults: 'pH vrijednost s preciznošću ±0.05 pH jedinice. MDK za pitku vodu: 6.5–9.5. MDK za površinske vode: 6.0–9.0.',
+    createdAt: '2025-04-01T10:00:00Z',
+  }],
+  'prot-2': [{
+    id: 'pv-2a', protocolId: 'prot-2', version: '1.0.0',
+    steps: [
+      { stepNumber: 1, title: 'Priprema AgNO₃ otopine', description: 'Pripremiti standardnu otopinu AgNO₃ c(AgNO₃) = 0.1000 mol/L. Standardizirati otopinu prema NaCl standardu. Evidentirati faktor otopine f.' },
+      { stepNumber: 2, title: 'Priprema uzorka', description: 'Oduzeti 100.0 mL uzorka u Erlenmeyerovu tikvicu od 250 mL. Ako je uzorak obojen ili zamućen, razrijediti destiliranom vodom. Podesiti pH na 7-10 NaOH ili HNO₃.' },
+      { stepNumber: 3, title: 'Dodatak indikatora', description: 'Dodati 1 mL otopine K₂CrO₄ (5% m/V) kao indikator. Otopina postaje žuta boja.' },
+      { stepNumber: 4, title: 'Titracija', description: 'Biretom dodavati AgNO₃ otopinu uz konstantno miješanje. Titrirati do pojave prvih trajnih smeđecrvenih taloga Ag₂CrO₄ (promjena boje žuta → smeđecrvena). Evidentirati volumen V(AgNO₃) u mL.' },
+      { stepNumber: 5, title: 'Izračun', description: 'w(Cl⁻) [mg/L] = V(AgNO₃) × f × c(AgNO₃) × M(Cl) × 1000 / V(uzorka) = V(AgNO₃) × f × 0.1000 × 35.45 × 1000 / 100.0' },
+    ],
+    requiredMaterials: ['AgNO₃ 0.1 mol/L (standardizirano)', 'K₂CrO₄ 5% otopina', 'NaCl standard', 'Destilirana voda', 'HNO₃ razrij. / NaOH razrij.'],
+    requiredEquipment: ['Bireta 25 mL (razd. 0.05 mL)', 'Erlenmeyerova tikvica 250 mL', 'Volumetrijska pipeta 100 mL', 'Analitička vaga'],
+    expectedResults: 'Masena koncentracija klorida [mg/L]. MDK za pitku vodu: 250 mg/L (HRN EN ISO 10304). Metoda: Mohr, ISO 9297.',
+    createdAt: '2025-02-15T09:00:00Z',
+  }],
+}
