@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import {
-  Button, Spinner,
+  Button, Spinner, Separator,
   Select, SelectTrigger, SelectValue, SelectIndicator, SelectPopover,
   ListBox, ListBoxItem,
   SearchField, SearchFieldGroup, SearchFieldSearchIcon, SearchFieldInput, SearchFieldClearButton,
+  TableRoot, TableContent, TableHeader, TableBody, TableRow, TableColumn, TableCell,
 } from '@heroui/react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ArrowUpDown } from 'lucide-react'
 import { useSamples, useUpdateSampleStatus } from './hooks'
 import SampleStatusBadge from './SampleStatusBadge'
 import { SAMPLE_STATUS_LABELS, ALLOWED_TRANSITIONS } from '../../types/samples'
@@ -13,72 +14,84 @@ import type { Sample, SampleStatus } from '../../types/samples'
 import { format } from 'date-fns'
 import { hr } from 'date-fns/locale'
 
+interface SortDescriptor { column: string; direction: 'ascending' | 'descending' }
+type SelectionSet = Set<string>
+
 const STATUS_OPTIONS = [
   { id: 'all', label: 'Svi statusi' },
   ...Object.entries(SAMPLE_STATUS_LABELS).map(([value, label]) => ({ id: value, label })),
 ]
 
-interface Props {
-  onRowClick?: (sample: Sample) => void
-}
+interface Props { onRowClick?: (sample: Sample) => void }
 
 export default function SamplesTable({ onRowClick }: Props) {
-  const [search, setSearch] = useState('')
   const [searchInput, setSearchInput] = useState('')
+  const [search, setSearch] = useState('')
   const [status, setStatus] = useState('')
   const [page, setPage] = useState(1)
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: 'receivedAt', direction: 'descending' })
+  const [selectedKeys, setSelectedKeys] = useState<SelectionSet | 'all'>(new Set())
 
   const { data, isLoading, isError } = useSamples({ page, limit: 20, search, status: status || undefined })
   const updateStatus = useUpdateSampleStatus()
 
-  function handleSearch() {
-    setSearch(searchInput)
-    setPage(1)
-  }
+  const sortedData = useMemo(() => {
+    if (!data?.data) return []
+    return [...data.data].sort((a, b) => {
+      const key = sortDescriptor.column as keyof Sample
+      const av = String((a as any)[key] ?? '')
+      const bv = String((b as any)[key] ?? '')
+      const cmp = av.localeCompare(bv, 'hr')
+      return sortDescriptor.direction === 'ascending' ? cmp : -cmp
+    })
+  }, [data?.data, sortDescriptor])
 
-  async function handleStatusChange(sample: Sample, newStatus: SampleStatus) {
-    await updateStatus.mutateAsync({ id: sample.id, status: newStatus })
+  const selectionCount = selectedKeys === 'all' ? sortedData.length : (selectedKeys as SelectionSet).size
+  const selectedSamples = selectedKeys === 'all'
+    ? sortedData
+    : sortedData.filter(s => (selectedKeys as SelectionSet).has(s.id))
+
+  async function bulkUpdateStatus(newStatus: SampleStatus) {
+    const eligible = selectedSamples.filter(s => ALLOWED_TRANSITIONS[s.status].includes(newStatus))
+    await Promise.all(eligible.map(s => updateStatus.mutateAsync({ id: s.id, status: newStatus })))
+    setSelectedKeys(new Set())
   }
 
   const total = data?.meta.total ?? 0
   const totalPages = Math.ceil(total / 20)
 
-  const COLUMNS = ['Kod', 'Vrsta', 'Izvor', 'Status', 'Zaprimio/la', 'Zaprimljeno', 'Akcija']
-
   return (
     <div className="flex flex-col gap-4">
-      {/* Filter bar */}
+      {/* Bulk action bar */}
+      {selectionCount > 0 && (
+        <div className="flex items-center gap-3 p-3 rounded-xl bg-accent-soft border border-accent/20 flex-wrap">
+          <span className="text-sm font-medium text-accent">{selectionCount} uzoraka odabrano</span>
+          <Separator orientation="vertical" className="h-4" />
+          <Button size="sm" variant="outline" onClick={() => bulkUpdateStatus('processing')}>→ U obradi</Button>
+          <Button size="sm" variant="outline" onClick={() => bulkUpdateStatus('analysed')}>→ Analiziran</Button>
+          <Button size="sm" variant="outline" onClick={() => bulkUpdateStatus('archived')}>→ Arhiviran</Button>
+          <Button size="sm" variant="ghost" className="ml-auto" onClick={() => setSelectedKeys(new Set())}>
+            Poništi odabir
+          </Button>
+        </div>
+      )}
+
+      {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex gap-2 flex-1">
-          <SearchField
-            value={searchInput}
-            onChange={setSearchInput}
-            onSubmit={handleSearch}
-            className="flex-1"
-          >
+          <SearchField value={searchInput} onChange={setSearchInput} onSubmit={() => { setSearch(searchInput); setPage(1) }} className="flex-1">
             <SearchFieldGroup>
               <SearchFieldSearchIcon />
               <SearchFieldInput placeholder="Pretraži po kodu, izvoru, vrsti..." />
               <SearchFieldClearButton />
             </SearchFieldGroup>
           </SearchField>
-          <Button variant="outline" size="sm" onClick={handleSearch}>Traži</Button>
+          <Button variant="outline" size="sm" onClick={() => { setSearch(searchInput); setPage(1) }}>Traži</Button>
         </div>
-
-        <Select
-          selectedKey={status || 'all'}
-          onSelectionChange={(key) => { setStatus(key === 'all' ? '' : String(key)); setPage(1) }}
-        >
-          <SelectTrigger className="min-w-36">
-            <SelectValue />
-            <SelectIndicator />
-          </SelectTrigger>
+        <Select selectedKey={status || 'all'} onSelectionChange={(key) => { setStatus(key === 'all' ? '' : String(key)); setPage(1) }}>
+          <SelectTrigger className="min-w-36"><SelectValue /><SelectIndicator /></SelectTrigger>
           <SelectPopover>
-            <ListBox>
-              {STATUS_OPTIONS.map((o) => (
-                <ListBoxItem key={o.id} id={o.id}>{o.label}</ListBoxItem>
-              ))}
-            </ListBox>
+            <ListBox>{STATUS_OPTIONS.map(o => <ListBoxItem key={o.id} id={o.id}>{o.label}</ListBoxItem>)}</ListBox>
           </SelectPopover>
         </Select>
       </div>
@@ -92,80 +105,82 @@ export default function SamplesTable({ onRowClick }: Props) {
             <p className="text-sm text-danger">Greška pri učitavanju uzoraka.</p>
             <p className="text-xs text-muted mt-1">Provjerite je li backend pokrenut.</p>
           </div>
-        ) : data?.data.length === 0 ? (
+        ) : sortedData.length === 0 ? (
           <div className="py-16 text-center">
             <p className="text-sm text-muted">Nema uzoraka koji odgovaraju pretrazi.</p>
           </div>
         ) : (
-          <table className="w-full text-sm">
-            <thead className="border-b border-border bg-surface-secondary">
-              <tr>
-                {COLUMNS.map((col) => (
-                  <th key={col} className="px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider whitespace-nowrap">{col}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-separator">
-              {data?.data.map((sample) => {
-                const nextStatuses = ALLOWED_TRANSITIONS[sample.status]
-                return (
-                  <tr
-                    key={sample.id}
-                    className="hover:bg-surface-secondary transition-colors cursor-pointer"
-                    onClick={() => onRowClick?.(sample)}
-                  >
-                    <td className="px-4 py-3 font-mono font-medium text-foreground">{sample.code}</td>
-                    <td className="px-4 py-3 text-foreground">{sample.type}</td>
-                    <td className="px-4 py-3 text-muted max-w-48 truncate">{sample.source}</td>
-                    <td className="px-4 py-3"><SampleStatusBadge status={sample.status} /></td>
-                    <td className="px-4 py-3 text-muted">
-                      {sample.receivedBy.firstName} {sample.receivedBy.lastName}
-                    </td>
-                    <td className="px-4 py-3 text-muted whitespace-nowrap">
-                      {format(new Date(sample.receivedAt), 'd. MMM yyyy.', { locale: hr })}
-                    </td>
-                    <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
-                      {nextStatuses.length > 0 && (
-                        <Select
-                          selectedKey={null}
-                          onSelectionChange={(key) => { if (key) handleStatusChange(sample, String(key) as SampleStatus) }}
-                        >
-                          <SelectTrigger className="text-xs min-w-28">
-                            <SelectValue placeholder="Promijeni →" />
-                            <SelectIndicator />
-                          </SelectTrigger>
-                          <SelectPopover>
-                            <ListBox>
-                              {nextStatuses.map((s) => (
-                                <ListBoxItem key={s} id={s}>{SAMPLE_STATUS_LABELS[s]}</ListBoxItem>
-                              ))}
-                            </ListBox>
-                          </SelectPopover>
-                        </Select>
-                      )}
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+          <TableRoot className="w-full">
+            <TableContent
+              aria-label="Lista uzoraka"
+              selectionMode="multiple"
+              selectedKeys={selectedKeys as any}
+              onSelectionChange={(keys: any) => setSelectedKeys(keys)}
+              sortDescriptor={sortDescriptor as any}
+              onSortChange={(d: any) => setSortDescriptor({ column: String(d.column), direction: d.direction })}
+            >
+              <TableHeader>
+                <TableColumn id="code" allowsSorting className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Kod</TableColumn>
+                <TableColumn id="type" allowsSorting className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Vrsta</TableColumn>
+                <TableColumn id="source" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Izvor</TableColumn>
+                <TableColumn id="status" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Status</TableColumn>
+                <TableColumn id="receivedBy" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Zaprimio/la</TableColumn>
+                <TableColumn id="receivedAt" allowsSorting className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Zaprimljeno</TableColumn>
+                <TableColumn id="actions" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Akcija</TableColumn>
+              </TableHeader>
+              <TableBody>
+                {sortedData.map((sample) => {
+                  const nextStatuses = ALLOWED_TRANSITIONS[sample.status]
+                  return (
+                    <TableRow
+                      key={sample.id}
+                      id={sample.id}
+                      className="cursor-pointer"
+                      onClick={() => onRowClick?.(sample)}
+                    >
+                      <TableCell className="px-4 py-3 font-mono font-medium text-foreground">{sample.code}</TableCell>
+                      <TableCell className="px-4 py-3 text-foreground">{sample.type}</TableCell>
+                      <TableCell className="px-4 py-3 text-muted max-w-48 truncate">{sample.source}</TableCell>
+                      <TableCell className="px-4 py-3"><SampleStatusBadge status={sample.status} /></TableCell>
+                      <TableCell className="px-4 py-3 text-muted text-sm">
+                        {sample.receivedBy.firstName} {sample.receivedBy.lastName}
+                      </TableCell>
+                      <TableCell className="px-4 py-3 text-muted whitespace-nowrap text-sm">
+                        {format(new Date(sample.receivedAt), 'd. MMM yyyy.', { locale: hr })}
+                      </TableCell>
+                      <TableCell className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
+                        {nextStatuses.length > 0 && (
+                          <Select
+                            selectedKey={null}
+                            placeholder="Promijeni →"
+                            onSelectionChange={(key) => { if (key) updateStatus.mutateAsync({ id: sample.id, status: String(key) as SampleStatus }) }}
+                          >
+                            <SelectTrigger className="text-xs min-w-28"><SelectValue /><SelectIndicator /></SelectTrigger>
+                            <SelectPopover>
+                              <ListBox>
+                                {nextStatuses.map(s => <ListBoxItem key={s} id={s}>{SAMPLE_STATUS_LABELS[s]}</ListBoxItem>)}
+                              </ListBox>
+                            </SelectPopover>
+                          </Select>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </TableContent>
+          </TableRoot>
         )}
       </div>
 
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
-          <p className="text-sm text-muted">
-            Ukupno: <span className="text-foreground font-medium">{total}</span> uzoraka
-          </p>
+          <p className="text-sm text-muted">Ukupno: <span className="text-foreground font-medium">{total}</span> uzoraka</p>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" isIconOnly isDisabled={page <= 1} onClick={() => setPage((p) => p - 1)}>
-              <ChevronLeft size={16} />
-            </Button>
+            <Button variant="outline" size="sm" isIconOnly isDisabled={page <= 1} onClick={() => setPage(p => p - 1)}><ChevronLeft size={16} /></Button>
             <span className="text-sm text-muted">{page} / {totalPages}</span>
-            <Button variant="outline" size="sm" isIconOnly isDisabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
-              <ChevronRight size={16} />
-            </Button>
+            <Button variant="outline" size="sm" isIconOnly isDisabled={page >= totalPages} onClick={() => setPage(p => p + 1)}><ChevronRight size={16} /></Button>
           </div>
         </div>
       )}
