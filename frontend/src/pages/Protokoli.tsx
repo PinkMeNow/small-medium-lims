@@ -5,11 +5,13 @@ import ProtocolForm from '../features/protocols/ProtocolForm'
 import ExperimentModal from '../features/protocols/ExperimentModal'
 import ExperimentsList from '../features/protocols/ExperimentsList'
 import ProtocolDetailModal from '../features/protocols/ProtocolDetailModal'
+import NewVersionModal from '../features/protocols/NewVersionModal'
 import type { Protocol } from '../types/protocols'
 
 export default function Protokoli() {
   const [selectedProtocol, setSelectedProtocol] = useState<Protocol | null>(null)
   const [detailProtocol, setDetailProtocol] = useState<Protocol | null>(null)
+  const [versionProtocol, setVersionProtocol] = useState<Protocol | null>(null)
 
   return (
     <div className="flex flex-col gap-6">
@@ -22,7 +24,11 @@ export default function Protokoli() {
         <ProtocolForm />
       </div>
 
-      <ProtocolsTable onRunExperiment={setSelectedProtocol} onViewDetail={setDetailProtocol} />
+      <ProtocolsTable
+        onRunExperiment={setSelectedProtocol}
+        onViewDetail={setDetailProtocol}
+        onNewVersion={setVersionProtocol}
+      />
 
       <ExperimentModal
         protocol={selectedProtocol}
@@ -32,6 +38,11 @@ export default function Protokoli() {
       <ProtocolDetailModal
         protocol={detailProtocol}
         onClose={() => setDetailProtocol(null)}
+      />
+
+      <NewVersionModal
+        protocol={versionProtocol}
+        onClose={() => setVersionProtocol(null)}
       />
 
       <Separator />

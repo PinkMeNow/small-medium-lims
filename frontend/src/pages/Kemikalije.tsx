@@ -1,11 +1,13 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import ChemicalsTable from '../features/chemicals/ChemicalsTable'
 import ChemicalForm from '../features/chemicals/ChemicalForm'
 import ChemicalQuantityModal from '../features/chemicals/ChemicalQuantityModal'
+import ChemicalEditModal from '../features/chemicals/ChemicalEditModal'
 import type { Chemical } from '../types/chemicals'
 
 export default function Kemikalije() {
   const [quantityChemical, setQuantityChemical] = useState<Chemical | null>(null)
+  const [editChemical, setEditChemical] = useState<Chemical | null>(null)
 
   return (
     <div className="flex flex-col gap-6">
@@ -17,11 +19,19 @@ export default function Kemikalije() {
         <ChemicalForm />
       </div>
 
-      <ChemicalsTable onUpdateQuantity={setQuantityChemical} />
+      <ChemicalsTable
+        onUpdateQuantity={setQuantityChemical}
+        onEdit={setEditChemical}
+      />
 
       <ChemicalQuantityModal
         chemical={quantityChemical}
         onClose={() => setQuantityChemical(null)}
+      />
+
+      <ChemicalEditModal
+        chemical={editChemical}
+        onClose={() => setEditChemical(null)}
       />
     </div>
   )

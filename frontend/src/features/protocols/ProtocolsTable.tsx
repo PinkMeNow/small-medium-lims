@@ -13,10 +13,11 @@ import type { Protocol } from '../../types/protocols'
 interface SortDescriptor { column: string; direction: 'ascending' | 'descending' }
 interface Props {
   onRunExperiment?: (protocol: Protocol) => void
+  onNewVersion?: (protocol: Protocol) => void
   onViewDetail?: (protocol: Protocol) => void
 }
 
-export default function ProtocolsTable({ onRunExperiment, onViewDetail }: Props) {
+export default function ProtocolsTable({ onRunExperiment, onViewDetail, onNewVersion }: Props) {
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
@@ -114,7 +115,10 @@ export default function ProtocolsTable({ onRunExperiment, onViewDetail }: Props)
                       </Button>
                     </TableCell>
                     <TableCell className="px-4 py-3">
-                      <Button variant="outline" size="sm" onClick={() => onRunExperiment?.(p)}>Pokreni</Button>
+                      <div className="flex items-center gap-1">
+                        <Button variant="outline" size="sm" onClick={() => onRunExperiment?.(p)}>Pokreni</Button>
+                        <Button variant="ghost" size="sm" onClick={() => onNewVersion?.(p)} className="text-muted text-xs">Nova ver.</Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
