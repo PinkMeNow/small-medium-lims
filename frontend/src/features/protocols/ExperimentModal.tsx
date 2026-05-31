@@ -52,7 +52,7 @@ export default function ExperimentModal({ protocol, onClose }: Props) {
         <ModalDialog>
           <ModalHeader className="flex items-center justify-between">
             <ModalHeading>Pokreni eksperiment</ModalHeading>
-            <ModalCloseTrigger asChild><CloseButton size="sm" /></ModalCloseTrigger>
+            <Button variant="ghost" isIconOnly size="sm" onClick={modal.close} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="flex flex-col gap-4 py-4">

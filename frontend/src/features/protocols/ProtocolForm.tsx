@@ -8,7 +8,7 @@ import {
   ListBox, ListBoxItem,
   useOverlayState,
 } from '@heroui/react'
-import { Plus, Trash2, GripVertical } from 'lucide-react'
+import { Plus, Trash2, GripVertical , X } from 'lucide-react'
 import { useCreateProtocol } from './hooks'
 import { PROTOCOL_CATEGORIES } from '../../types/protocols'
 import type { ProtocolStep } from '../../types/protocols'
@@ -91,7 +91,7 @@ export default function ProtocolForm() {
           <ModalDialog className="w-full max-w-2xl">
             <ModalHeader className="flex items-center justify-between">
               <ModalHeading>Novi SOP protokol</ModalHeading>
-              <ModalCloseTrigger asChild><CloseButton size="sm" /></ModalCloseTrigger>
+              <Button variant="ghost" isIconOnly size="sm" onClick={modal.close} aria-label="Zatvori"><X size={16} /></Button>
             </ModalHeader>
 
             <ModalBody className="overflow-y-auto max-h-[68vh] flex flex-col gap-5 py-4">

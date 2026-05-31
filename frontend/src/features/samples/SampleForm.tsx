@@ -8,7 +8,7 @@ import {
   ListBox, ListBoxItem,
   useOverlayState,
 } from '@heroui/react'
-import { Plus } from 'lucide-react'
+import { Plus , X } from 'lucide-react'
 import FieldTooltip from '../../components/FieldTooltip'
 import { useCreateSample } from './hooks'
 import { SAMPLE_TYPES } from '../../types/samples'
@@ -60,9 +60,7 @@ export default function SampleForm() {
           <ModalDialog>
             <ModalHeader className="flex items-center justify-between">
               <ModalHeading>Registracija uzorka</ModalHeading>
-              <ModalCloseTrigger asChild>
-                <CloseButton size="sm" />
-              </ModalCloseTrigger>
+              <Button variant="ghost" isIconOnly size="sm" onClick={modal.close} aria-label="Zatvori"><X size={16} /></Button>
             </ModalHeader>
 
             <ModalBody className="flex flex-col gap-4 py-4">

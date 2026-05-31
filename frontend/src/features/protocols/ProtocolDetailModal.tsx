@@ -43,7 +43,7 @@ export default function ProtocolDetailModal({ protocol, onClose }: Props) {
                 v{protocol.currentVersion}
               </Chip>
             </div>
-            <ModalCloseTrigger asChild onClick={handleClose}><CloseButton size="sm" /></ModalCloseTrigger>
+            <Button variant="ghost" isIconOnly size="sm" onClick={handleClose} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="overflow-y-auto max-h-[72vh] flex flex-col gap-5 py-4">

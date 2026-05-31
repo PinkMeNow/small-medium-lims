@@ -62,7 +62,7 @@ export default function UserEditModal({ user, onClose }: Props) {
         <ModalDialog>
           <ModalHeader className="flex items-center justify-between">
             <ModalHeading>Uredi korisnika</ModalHeading>
-            <ModalCloseTrigger asChild onClick={handleClose}><CloseButton size="sm" /></ModalCloseTrigger>
+            <Button variant="ghost" isIconOnly size="sm" onClick={handleClose} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="flex flex-col gap-4 py-4">

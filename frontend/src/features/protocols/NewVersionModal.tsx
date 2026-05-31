@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
@@ -6,7 +6,7 @@ import {
   CloseButton, TextField, Label, TextArea,
   useOverlayState,
 } from '@heroui/react'
-import { Plus, Trash2, GripVertical } from 'lucide-react'
+import { Plus, Trash2, GripVertical , X } from 'lucide-react'
 import { addProtocolVersion } from '../../api/protocols.api'
 import { useQueryClient } from '@tanstack/react-query'
 import { PROTOCOLS_KEY } from './hooks'
@@ -90,7 +90,7 @@ export default function NewVersionModal({ protocol, onClose }: Props) {
               <ModalHeading>Nova verzija protokola</ModalHeading>
               <p className="text-xs text-muted mt-0.5 truncate">{protocol.name} — trenutna: v{protocol.currentVersion}</p>
             </div>
-            <ModalCloseTrigger asChild onClick={handleClose}><CloseButton size="sm" /></ModalCloseTrigger>
+            <Button variant="ghost" isIconOnly size="sm" onClick={handleClose} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="overflow-y-auto max-h-[68vh] flex flex-col gap-5 py-4">

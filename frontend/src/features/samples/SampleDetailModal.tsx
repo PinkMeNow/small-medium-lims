@@ -7,7 +7,7 @@ import {
   CloseButton, useOverlayState,
 } from '@heroui/react'
 import { QRCode } from 'react-qr-code'
-import { Printer } from 'lucide-react'
+import { Printer , X } from 'lucide-react'
 import { getSample } from '../../api/samples.api'
 import { SAMPLE_STATUS_LABELS } from '../../types/samples'
 import type { Sample, SampleStatus } from '../../types/samples'
@@ -80,7 +80,7 @@ export default function SampleDetailModal({ sample, onClose }: Props) {
                 {SAMPLE_STATUS_LABELS[sample.status]}
               </Chip>
             </div>
-            <ModalCloseTrigger asChild onClick={handleClose}><CloseButton size="sm" /></ModalCloseTrigger>
+            <Button variant="ghost" isIconOnly size="sm" onClick={handleClose} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="overflow-y-auto max-h-[85vh] sm:max-h-[70vh] flex flex-col gap-5 py-4">

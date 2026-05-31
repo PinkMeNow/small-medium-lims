@@ -7,7 +7,7 @@ import {
   CloseButton, TextField, Label, TextArea,
   useOverlayState,
 } from '@heroui/react'
-import { CheckCircle, XCircle } from 'lucide-react'
+import { CheckCircle, XCircle , X } from 'lucide-react'
 import { getExperiments } from '../../api/protocols.api'
 import { useCompleteExperiment } from './hooks'
 import ExperimentStatusBadge from './ExperimentStatusBadge'
@@ -48,7 +48,7 @@ function CompleteModal({ experiment, onClose }: { experiment: Experiment | null;
         <ModalDialog>
           <ModalHeader className="flex items-center justify-between">
             <ModalHeading>Završi eksperiment</ModalHeading>
-            <ModalCloseTrigger asChild onClick={handleClose}><CloseButton size="sm" /></ModalCloseTrigger>
+            <Button variant="ghost" isIconOnly size="sm" onClick={handleClose} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
           <ModalBody className="flex flex-col gap-4 py-4">
             <div className="p-3 rounded-xl bg-surface-secondary border border-border">

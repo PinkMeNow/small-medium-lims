@@ -8,7 +8,7 @@ import {
   ListBox, ListBoxItem,
   useOverlayState,
 } from '@heroui/react'
-import { Plus } from 'lucide-react'
+import { Plus , X } from 'lucide-react'
 import { useCreateUser } from './hooks'
 import { ROLE_OPTIONS } from '../../types/users'
 import type { UserRole } from '../../types/users'
@@ -54,7 +54,7 @@ export default function UserForm() {
           <ModalDialog>
             <ModalHeader className="flex items-center justify-between">
               <ModalHeading>Novi korisnik</ModalHeading>
-              <ModalCloseTrigger asChild><CloseButton size="sm" /></ModalCloseTrigger>
+              <Button variant="ghost" isIconOnly size="sm" onClick={modal.close} aria-label="Zatvori"><X size={16} /></Button>
             </ModalHeader>
 
             <ModalBody className="flex flex-col gap-4 py-4">

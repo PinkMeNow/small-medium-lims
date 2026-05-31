@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
@@ -109,7 +109,7 @@ export default function ChemicalEditModal({ chemical, onClose }: Props) {
         <ModalDialog className="w-full max-w-2xl">
           <ModalHeader className="flex items-center justify-between">
             <ModalHeading>Uredi kemikaliju</ModalHeading>
-            <ModalCloseTrigger asChild onClick={() => { modal.close(); onClose() }}><CloseButton size="sm" /></ModalCloseTrigger>
+            <Button variant="ghost" isIconOnly size="sm" onClick={() => { modal.close(); onClose() }} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="overflow-y-auto max-h-[65vh] sm:max-h-[65vh] flex flex-col gap-5 py-4">

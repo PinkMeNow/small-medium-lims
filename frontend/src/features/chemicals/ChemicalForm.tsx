@@ -9,7 +9,7 @@ import {
   CheckboxGroup, Checkbox, CheckboxControl, CheckboxContent,
   useOverlayState,
 } from '@heroui/react'
-import { Plus } from 'lucide-react'
+import { Plus , X } from 'lucide-react'
 import FieldTooltip from '../../components/FieldTooltip'
 import { useCreateChemical } from './hooks'
 import { CHEMICAL_UNITS, GHS_INFO } from '../../types/chemicals'
@@ -89,7 +89,7 @@ export default function ChemicalForm() {
           <ModalDialog className="w-full max-w-2xl">
             <ModalHeader className="flex items-center justify-between">
               <ModalHeading>Dodaj kemikaliju</ModalHeading>
-              <ModalCloseTrigger asChild><CloseButton size="sm" /></ModalCloseTrigger>
+              <Button variant="ghost" isIconOnly size="sm" onClick={modal.close} aria-label="Zatvori"><X size={16} /></Button>
             </ModalHeader>
 
             <ModalBody className="overflow-y-auto max-h-[65vh] flex flex-col gap-5 py-4">
