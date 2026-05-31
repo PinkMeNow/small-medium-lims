@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, FlaskConical, Beaker,
-  ClipboardList, BarChart3, Users,
+  ClipboardList, BarChart3, Users, HelpCircle,
   LogOut, ChevronLeft, ChevronRight,
 } from 'lucide-react'
 import {
@@ -17,6 +17,7 @@ const NAV = [
   { href: '/kemikalije', icon: Beaker,          label: 'Kemikalije' },
   { href: '/protokoli',  icon: ClipboardList,   label: 'Protokoli' },
   { href: '/izvještaji', icon: BarChart3,        label: 'Izvještaji' },
+  { href: '/pomoc',      icon: HelpCircle,      label: 'Pomoć' },
 ]
 
 const ADMIN_NAV = [

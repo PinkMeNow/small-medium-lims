@@ -49,3 +49,11 @@
   --border: oklch(28.00% 0.0055 248.08);
   --separator: oklch(25.00% 0.0055 248.08);
 }
+
+/* Print styles — hide navigation and controls */
+@media print {
+  aside, header, .print\\:hidden { display: none !important; }
+  main { padding: 0 !important; }
+  body { background: white !important; color: black !important; }
+  [data-slot="table-row"]:hover { background: transparent !important; }
+}

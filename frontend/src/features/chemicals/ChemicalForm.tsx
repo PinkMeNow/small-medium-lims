@@ -10,6 +10,7 @@ import {
   useOverlayState,
 } from '@heroui/react'
 import { Plus } from 'lucide-react'
+import FieldTooltip from '../../components/FieldTooltip'
 import { useCreateChemical } from './hooks'
 import { CHEMICAL_UNITS, GHS_INFO } from '../../types/chemicals'
 import type { GHSClass } from '../../types/chemicals'
@@ -99,7 +100,10 @@ export default function ChemicalForm() {
                   <Input placeholder="npr. Klorovodična kiselina" className="mt-1" />
                 </TextField>
                 <TextField value={form.casNumber} onChange={(v) => set('casNumber', v)}>
-                  <Label className="text-sm font-medium text-foreground">CAS broj <span className="text-muted font-normal">(neoob.)</span></Label>
+                  <Label className="text-sm font-medium text-foreground flex items-center gap-1">
+                    CAS broj <span className="text-muted font-normal">(neoob.)</span>
+                    <FieldTooltip text="Chemical Abstracts Service registarski broj. Format: XXXXXXX-YY-Z (npr. 7647-01-0 za HCl, 1310-73-2 za NaOH)" />
+                  </Label>
                   <Input placeholder="XXXXXXX-YY-Z" className="mt-1" />
                 </TextField>
                 <TextField value={form.manufacturer} onChange={(v) => set('manufacturer', v)}>
@@ -150,7 +154,10 @@ export default function ChemicalForm() {
                 </div>
                 <div className="col-span-1">
                   <TextField value={form.minQuantity} onChange={(v) => set('minQuantity', v)}>
-                    <Label className="text-sm font-medium text-foreground">Min. zaliha <span className="text-muted font-normal">(neoob.)</span></Label>
+                    <Label className="text-sm font-medium text-foreground flex items-center gap-1">
+                      Min. zaliha <span className="text-muted font-normal">(neoob.)</span>
+                      <FieldTooltip text="Prag ispod kojeg sustav šalje upozorenje o niskim zalihama. Ostavite 0 za bez upozorenja." />
+                    </Label>
                     <Input type="number" min="0" step="0.001" placeholder="0" className="mt-1" />
                   </TextField>
                 </div>
@@ -180,7 +187,10 @@ export default function ChemicalForm() {
 
               {/* GHS klase */}
               <div className="flex flex-col gap-2">
-                <Label className="text-sm font-medium text-foreground">GHS klasifikacija <span className="text-muted font-normal">(neoob.)</span></Label>
+                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
+                  GHS klasifikacija <span className="text-muted font-normal">(neoob.)</span>
+                  <FieldTooltip text="Globalno usklađeni sustav klasifikacije opasnih kemikalija. Označite sve primjenjive kategorije opasnosti prema SDS-u." />
+                </Label>
                 <CheckboxGroup value={ghsClasses} onChange={(vals) => setGhsClasses(vals as GHSClass[])}>
                   <div className="grid grid-cols-3 gap-1 mt-1">
                     {GHS_CODES.map((code) => (
@@ -195,7 +205,10 @@ export default function ChemicalForm() {
 
               {/* SDS URL */}
               <TextField value={form.sdsUrl} onChange={(v) => set('sdsUrl', v)}>
-                <Label className="text-sm font-medium text-foreground">SDS URL <span className="text-muted font-normal">(neoob.)</span></Label>
+                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
+                  SDS URL <span className="text-muted font-normal">(neoob.)</span>
+                  <FieldTooltip text="Poveznica na Sigurnosno-tehnički list (Safety Data Sheet). Pronađite ga na web stranici proizvođača ili u SDS bazi podataka." />
+                </Label>
                 <Input type="url" placeholder="https://..." className="mt-1" />
               </TextField>
 

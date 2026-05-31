@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, Spinner, Chip } from '@heroui/react'
 import { FlaskConical, Beaker, ClipboardList, BarChart3, AlertTriangle } from 'lucide-react'
 import { getDashboardStats, getRecentActivity } from '../api/dashboard.api'
@@ -22,6 +23,7 @@ const STATUS_COLOR: Record<SampleStatus, 'primary' | 'warning' | 'success' | 'de
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const stats = useQuery({ queryKey: ['dashboard-stats'], queryFn: getDashboardStats, refetchInterval: 60_000 })
   const activity = useQuery({ queryKey: ['dashboard-activity'], queryFn: getRecentActivity, refetchInterval: 30_000 })
 
@@ -32,6 +34,7 @@ export default function Dashboard() {
       sub: stats.data ? `od ${stats.data.samplesTotal} ukupno` : undefined,
       icon: FlaskConical,
       alert: false,
+      onClick: () => navigate('/uzorci'),
     },
     {
       label: 'Kemikalije — upozorenja',
@@ -39,6 +42,7 @@ export default function Dashboard() {
       sub: 'istekle ili niske zalihe',
       icon: Beaker,
       alert: (stats.data?.chemicalsAlerts ?? 0) > 0,
+      onClick: () => navigate('/kemikalije'),
     },
     {
       label: 'Aktivni protokoli',
@@ -46,6 +50,7 @@ export default function Dashboard() {
       sub: 'SOP predlošci',
       icon: ClipboardList,
       alert: false,
+      onClick: () => navigate('/protokoli'),
     },
     {
       label: 'Eksperimenti ovaj mj.',
@@ -53,6 +58,7 @@ export default function Dashboard() {
       sub: undefined,
       icon: BarChart3,
       alert: false,
+      onClick: () => navigate('/protokoli'),
     },
   ]
 
@@ -65,8 +71,12 @@ export default function Dashboard() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map(({ label, value, sub, icon: Icon, alert }) => (
-          <Card key={label}>
+        {statCards.map(({ label, value, sub, icon: Icon, alert, onClick }) => (
+          <Card
+            key={label}
+            onClick={onClick}
+            className="cursor-pointer hover:shadow-surface transition-shadow"
+          >
             <CardContent className="flex flex-row items-center gap-4 p-5">
               <div className={`p-2 rounded-lg shrink-0 ${alert ? 'bg-warning-soft text-warning' : 'bg-accent-soft text-accent'}`}>
                 {alert ? <AlertTriangle size={20} /> : <Icon size={20} />}

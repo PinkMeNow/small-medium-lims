@@ -9,6 +9,7 @@ import {
   useOverlayState,
 } from '@heroui/react'
 import { Plus } from 'lucide-react'
+import FieldTooltip from '../../components/FieldTooltip'
 import { useCreateSample } from './hooks'
 import { SAMPLE_TYPES } from '../../types/samples'
 
@@ -67,7 +68,10 @@ export default function SampleForm() {
             <ModalBody className="flex flex-col gap-4 py-4">
               {/* Vrsta */}
               <div className="flex flex-col gap-1">
-                <Label className="text-sm font-medium text-foreground">Vrsta uzorka</Label>
+                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
+                  Vrsta uzorka
+                  <FieldTooltip text="Odaberite kategoriju uzorka koja najboije opisuje materijal koji analizirate." />
+                </Label>
                 <Select selectedKey={type} onSelectionChange={(key) => setType(String(key))}>
                   <SelectTrigger className="mt-1 w-full">
                     <SelectValue />
@@ -85,7 +89,10 @@ export default function SampleForm() {
 
               {/* Izvor */}
               <TextField value={source} onChange={setSource}>
-                <Label className="text-sm font-medium text-foreground">Izvor uzorka</Label>
+                <Label className="text-sm font-medium text-foreground flex items-center gap-1">
+                  Izvor uzorka
+                  <FieldTooltip text="Opišite točno mjesto uzorkovanja — lokacija, datum, uvjeti. Što preciznije, to bolji audit trail." />
+                </Label>
                 <Input
                   placeholder="npr. Rijeka Sava — most Jankomir"
                   className="mt-1"
