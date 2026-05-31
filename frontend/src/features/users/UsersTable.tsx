@@ -33,7 +33,7 @@ export default function UsersTable({ onEdit }: Props) {
           <p className="text-xs text-muted mt-1">Provjerite je li backend pokrenut.</p>
         </div>
       ) : (
-        <TableRoot className="w-full">
+        <TableRoot className="w-full min-w-[640px]">
           <TableContent aria-label="Lista korisnika">
             <TableHeader>
               <TableColumn id="name" className="px-4 py-3 text-xs font-medium text-muted uppercase tracking-wider">Korisnik</TableColumn>

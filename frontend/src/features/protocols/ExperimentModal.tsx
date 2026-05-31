@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
@@ -45,7 +45,7 @@ export default function ExperimentModal({ protocol, onClose }: Props) {
   return (
     <ModalRoot state={modal}>
       <ModalBackdrop />
-      <ModalContainer size="md" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
+      <ModalContainer size="md" className="fixed inset-0 z-50 overflow-y-auto flex flex-col p-2 sm:p-4">
         <ModalDialog>
           <ModalHeader>
             <ModalHeading>Pokreni eksperiment</ModalHeading>

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+﻿import { useState, useMemo } from 'react'
 import {
   Button, Spinner, Separator,
   Select, SelectTrigger, SelectValue, SelectIndicator, SelectPopover,
@@ -110,7 +110,7 @@ export default function SamplesTable({ onRowClick }: Props) {
             <p className="text-sm text-muted">Nema uzoraka koji odgovaraju pretrazi.</p>
           </div>
         ) : (
-          <TableRoot className="w-full">
+          <TableRoot className="w-full min-w-[800px]">
             <TableContent
               aria-label="Lista uzoraka"
               selectionMode="multiple"

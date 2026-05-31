@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+﻿import { useState, useMemo } from 'react'
 import {
   Button, Spinner,
   SearchField, SearchFieldGroup, SearchFieldSearchIcon, SearchFieldInput, SearchFieldClearButton,
@@ -63,7 +63,7 @@ export default function ProtocolsTable({ onRunExperiment, onViewDetail, onNewVer
         ) : sortedData.length === 0 ? (
           <div className="py-16 text-center"><p className="text-sm text-muted">Nema protokola. Dodajte prvi SOP.</p></div>
         ) : (
-          <TableRoot className="w-full">
+          <TableRoot className="w-full min-w-[820px]">
             <TableContent
               aria-label="Lista protokola"
               sortDescriptor={sortDescriptor as any}

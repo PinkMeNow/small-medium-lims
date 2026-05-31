@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+﻿import { useState, useMemo } from 'react'
 import {
   Button, Spinner, Separator,
   Select, SelectTrigger, SelectValue, SelectIndicator, SelectPopover,
@@ -104,7 +104,7 @@ export default function ChemicalsTable({ onUpdateQuantity, onEdit }: Props) {
         ) : sortedData.length === 0 ? (
           <div className="py-16 text-center"><p className="text-sm text-muted">Nema kemikalija koje odgovaraju pretrazi.</p></div>
         ) : (
-          <TableRoot className="w-full">
+          <TableRoot className="w-full min-w-[900px]">
             <TableContent
               aria-label="Lista kemikalija"
               selectionMode={isAdmin ? 'multiple' : 'none'}

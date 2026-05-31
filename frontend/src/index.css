@@ -56,6 +56,12 @@
   --separator: oklch(25.00% 0.0055 248.08);
 }
 
+/* Modal centering: flex-col container + m-auto dialog = centered with overflow scroll */
+[data-slot="modal-container"] > [data-slot="modal-dialog"],
+[data-slot="modal-container"] > .w-full {
+  margin: auto;
+}
+
 /* Responsive tables — smaller padding + touch scroll on mobile */
 @media (max-width: 640px) {
   [data-slot="table-cell"],
