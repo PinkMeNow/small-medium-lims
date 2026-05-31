@@ -30,10 +30,13 @@ export default function Protokoli() {
         onNewVersion={setVersionProtocol}
       />
 
-      <ExperimentModal
-        protocol={selectedProtocol}
-        onClose={() => setSelectedProtocol(null)}
-      />
+      {/* Mount only when protocol selected — ensures ModalBackdrop fully unmounts on close */}
+      {selectedProtocol && (
+        <ExperimentModal
+          protocol={selectedProtocol}
+          onClose={() => setSelectedProtocol(null)}
+        />
+      )}
 
       <ProtocolDetailModal
         protocol={detailProtocol}

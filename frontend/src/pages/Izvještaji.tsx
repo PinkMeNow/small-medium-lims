@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
   Button, Spinner, Separator,
@@ -99,7 +99,7 @@ function SamplesReport() {
       {isError && <p className="text-sm text-danger">Greška — je li backend pokrenut?</p>}
       {data && (
         <>
-          <div className="flex gap-6 p-4 rounded-xl bg-surface-secondary border border-border text-sm">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 p-4 rounded-xl bg-surface-secondary border border-border text-sm">
             <span className="text-muted">Ukupno: <b className="text-foreground">{data.total}</b></span>
             {Object.entries(data.summary as Record<string, number>).map(([s, n]) => (
               <span key={s} className="text-muted">{SAMPLE_STATUS_LABELS[s as SampleStatus] ?? s}: <b className="text-foreground">{n}</b></span>
@@ -162,7 +162,7 @@ function ChemicalsReport() {
       {isError && <p className="text-sm text-danger">Greška — je li backend pokrenut?</p>}
       {data && (
         <>
-          <div className="flex gap-6 p-4 rounded-xl bg-surface-secondary border border-border text-sm">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 p-4 rounded-xl bg-surface-secondary border border-border text-sm">
             <span className="text-muted">Ukupno: <b className="text-foreground">{data.summary.total}</b></span>
             <span className="text-danger">Isteklo: <b>{data.summary.expired}</b></span>
             <span className="text-warning">Ističe uskoro: <b>{data.summary.expiringSoon}</b></span>
@@ -236,7 +236,7 @@ function ExperimentsReport() {
       {isError && <p className="text-sm text-danger">Greška — je li backend pokrenut?</p>}
       {data && (
         <>
-          <div className="flex gap-6 p-4 rounded-xl bg-surface-secondary border border-border text-sm">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 p-4 rounded-xl bg-surface-secondary border border-border text-sm">
             <span className="text-muted">Ukupno: <b className="text-foreground">{data.total}</b></span>
             {Object.entries(data.summary as Record<string, number>).map(([s, n]) => (
               <span key={s} className="text-muted">{EXPERIMENT_STATUS_LABELS[s as ExperimentStatus] ?? s}: <b className="text-foreground">{n}</b></span>

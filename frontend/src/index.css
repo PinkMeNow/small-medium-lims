@@ -56,6 +56,21 @@
   --separator: oklch(25.00% 0.0055 248.08);
 }
 
+/* Responsive tables — smaller padding + touch scroll on mobile */
+@media (max-width: 640px) {
+  [data-slot="table-cell"],
+  [data-slot="table-column"] th,
+  th, td {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    font-size: 0.75rem !important;
+  }
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+}
+
 /* Print styles — hide navigation and controls */
 @media print {
   aside, header, .print\\:hidden { display: none !important; }

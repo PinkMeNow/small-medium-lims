@@ -1,18 +1,16 @@
-﻿import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
-  ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalCloseTrigger,
-  CloseButton, TextField, Label, Input, TextArea, useOverlayState,
+  ModalHeader, ModalHeading, ModalBody, ModalFooter,
+  TextField, Label, Input, TextArea, useOverlayState,
 } from '@heroui/react'
-import { X } from 'lucide-react'
+import { useState } from 'react'
 import { useCreateExperiment } from './hooks'
 import type { Protocol } from '../../types/protocols'
 
-const inputCls = 'w-full px-3 py-2 rounded-xl bg-field-background border border-field-border text-field-foreground text-sm focus:outline-none focus:border-accent placeholder:text-field-placeholder'
-
 interface Props {
-  protocol: Protocol | null
+  protocol: Protocol
   onClose: () => void
 }
 
@@ -20,27 +18,25 @@ export default function ExperimentModal({ protocol, onClose }: Props) {
   const modal = useOverlayState()
   const { mutateAsync, isPending } = useCreateExperiment()
 
-  const [title, setTitle] = useState('')
+  const [title, setTitle] = useState(`${protocol.name} — ${new Date().toLocaleDateString('hr')}`)
   const [notes, setNotes] = useState('')
   const [greška, setGreška] = useState('')
 
-  useEffect(() => {
-    if (protocol) {
-      setTitle(`${protocol.name} — ${new Date().toLocaleDateString('hr')}`)
-      setNotes('')
-      setGreška('')
-      modal.open()
-    }
-  }, [protocol])
+  // Open immediately on mount
+  useEffect(() => { modal.open() }, [])
+
+  function handleClose() {
+    modal.close()
+    // Wait for close animation then call onClose
+    setTimeout(onClose, 150)
+  }
 
   async function handleSubmit() {
-    if (!protocol) return
     if (!title.trim()) { setGreška('Naslov je obavezan.'); return }
     setGreška('')
     try {
       await mutateAsync({ protocolId: protocol.id, title: title.trim(), notes: notes.trim() || undefined })
-      modal.close()
-      onClose()
+      handleClose()
     } catch (err: any) {
       setGreška(err?.response?.data?.error?.message ?? 'Greška pri pokretanju.')
     }
@@ -51,19 +47,16 @@ export default function ExperimentModal({ protocol, onClose }: Props) {
       <ModalBackdrop />
       <ModalContainer size="md" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
         <ModalDialog>
-          <ModalHeader className="flex items-center justify-between">
+          <ModalHeader>
             <ModalHeading>Pokreni eksperiment</ModalHeading>
-            <Button variant="ghost" isIconOnly size="sm" onClick={modal.close} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="flex flex-col gap-4 py-4">
-            {protocol && (
-              <div className="p-3 rounded-xl bg-accent-soft border border-accent/20">
-                <p className="text-xs text-muted">Protokol</p>
-                <p className="text-sm font-medium text-foreground">{protocol.name}</p>
-                <p className="text-xs text-accent">verzija {protocol.currentVersion}</p>
-              </div>
-            )}
+            <div className="p-3 rounded-xl bg-accent-soft border border-accent/20">
+              <p className="text-xs text-muted">Protokol</p>
+              <p className="text-sm font-medium text-foreground">{protocol.name}</p>
+              <p className="text-xs text-accent">verzija {protocol.currentVersion}</p>
+            </div>
 
             <TextField value={title} onChange={setTitle}>
               <Label className="text-sm font-medium text-foreground">Naslov eksperimenta</Label>
@@ -71,7 +64,9 @@ export default function ExperimentModal({ protocol, onClose }: Props) {
             </TextField>
 
             <TextField value={notes} onChange={setNotes}>
-              <Label className="text-sm font-medium text-foreground">Bilješka <span className="text-muted font-normal">(neobavezno)</span></Label>
+              <Label className="text-sm font-medium text-foreground">
+                Bilješka <span className="text-muted font-normal">(neobavezno)</span>
+              </Label>
               <TextArea rows={3} placeholder="Početne napomene..." className="mt-1" />
             </TextField>
 
@@ -79,7 +74,7 @@ export default function ExperimentModal({ protocol, onClose }: Props) {
           </ModalBody>
 
           <ModalFooter className="gap-2">
-            <Button variant="outline" onClick={() => { modal.close(); onClose() }} isDisabled={isPending}>Odustani</Button>
+            <Button variant="outline" onClick={handleClose} isDisabled={isPending}>Odustani</Button>
             <Button variant="primary" onClick={handleSubmit} isDisabled={isPending}>
               {isPending ? <Spinner size="sm" /> : 'Pokreni eksperiment'}
             </Button>
