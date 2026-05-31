@@ -1,0 +1,17 @@
+{
+  "name": "LIMS",
+  "short_name": "LIMS",
+  "description": "Laboratorijski informacijski sustav za male laboratorije",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0C0E0F",
+  "theme_color": "#007BCC",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

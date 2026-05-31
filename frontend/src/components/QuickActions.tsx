@@ -111,7 +111,13 @@ export default function QuickActions({ open, onClose }: Props) {
             placeholder="Pretraži akcije..."
             className="flex-1 bg-transparent text-foreground text-sm placeholder:text-muted outline-none"
           />
-          <kbd className="text-xs text-muted bg-default px-1.5 py-0.5 rounded font-mono">Esc</kbd>
+          <button
+            onClick={onClose}
+            className="text-xs text-muted bg-default hover:bg-default-hover px-1.5 py-0.5 rounded font-mono transition-colors cursor-pointer"
+            aria-label="Zatvori"
+          >
+            Esc
+          </button>
         </div>
 
         {/* Results */}
