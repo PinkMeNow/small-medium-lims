@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import { authRouter } from './features/auth/auth.router'
 import { samplesRouter } from './features/samples/samples.router'
 import { chemicalsRouter } from './features/chemicals/chemicals.router'
+import { protocolsRouter, experimentsRouter } from './features/protocols/protocols.router'
 import { errorMiddleware } from './middleware/error'
 import { env } from './lib/env'
 
@@ -23,5 +24,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/samples', samplesRouter)
 app.use('/api/v1/chemicals', chemicalsRouter)
+app.use('/api/v1/protocols', protocolsRouter)
+app.use('/api/v1/experiments', experimentsRouter)
 
 app.use(errorMiddleware)
