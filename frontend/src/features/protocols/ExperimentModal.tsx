@@ -5,6 +5,7 @@ import {
   ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalCloseTrigger,
   CloseButton, TextField, Label, Input, TextArea, useOverlayState,
 } from '@heroui/react'
+import { X } from 'lucide-react'
 import { useCreateExperiment } from './hooks'
 import type { Protocol } from '../../types/protocols'
 

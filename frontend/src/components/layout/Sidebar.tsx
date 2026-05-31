@@ -4,6 +4,7 @@ import {
   ClipboardList, BarChart3, Users, HelpCircle,
   LogOut, ChevronLeft, ChevronRight,
 } from 'lucide-react'
+import AppIcon from '../AppIcon'
 import {
   Button, Separator,
   TooltipRoot, TooltipTrigger, TooltipContent,
@@ -95,7 +96,7 @@ export default function Sidebar({ collapsed, onToggle, isMobile, onMobileClose }
     >
       {/* Brand */}
       <div className={['flex items-center h-14 border-b border-border shrink-0 px-4 gap-2', effectiveCollapsed ? 'justify-center' : ''].join(' ')}>
-        <FlaskConical size={20} className="text-accent shrink-0" />
+        <AppIcon size={22} className="text-accent shrink-0" />
         {!effectiveCollapsed && <span className="font-semibold text-foreground text-base tracking-tight">LIMS</span>}
       </div>
 

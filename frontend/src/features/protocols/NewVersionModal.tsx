@@ -2,8 +2,8 @@
 import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
-  ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalCloseTrigger,
-  CloseButton, TextField, Label, TextArea,
+  ModalHeader, ModalHeading, ModalBody, ModalFooter,
+  TextField, Label, TextArea,
   useOverlayState,
 } from '@heroui/react'
 import { Plus, Trash2, GripVertical , X } from 'lucide-react'
@@ -112,14 +112,12 @@ export default function NewVersionModal({ protocol, onClose }: Props) {
                   <div className="flex-1 flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-mono font-semibold text-accent bg-accent-soft px-2 py-0.5 rounded-md shrink-0">{step.stepNumber}</span>
-                      <TextField value={step.title} onChange={v => updateStep(i, 'title', v)} className="flex-1">
-                        <input
-                          value={step.title}
-                          onChange={e => updateStep(i, 'title', e.target.value)}
-                          placeholder="Naslov koraka"
-                          className="flex-1 px-2 py-1 rounded-lg bg-field-background border border-field-border text-sm text-foreground focus:outline-none focus:border-accent w-full"
-                        />
-                      </TextField>
+                      <input
+                        value={step.title}
+                        onChange={e => updateStep(i, 'title', e.target.value)}
+                        placeholder="Naslov koraka"
+                        className="flex-1 px-2 py-1 rounded-lg bg-field-background border border-field-border text-sm text-foreground focus:outline-none focus:border-accent w-full"
+                      />
                     </div>
                     <textarea
                       value={step.description}

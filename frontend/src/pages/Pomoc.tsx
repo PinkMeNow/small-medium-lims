@@ -69,7 +69,7 @@ export default function Pomoc() {
             {grouped.map(cat => (
               <div key={cat.id} className="mb-2">
                 <p className="text-xs font-semibold text-muted uppercase tracking-wider px-3 py-1">
-                  {cat.icon} {cat.title}
+                  {cat.title}
                 </p>
                 {cat.articles.map(article => (
                   <button
