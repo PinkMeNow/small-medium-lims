@@ -1,4 +1,4 @@
-import { Chip } from '@heroui/react'
+﻿import { Chip } from '@heroui/react'
 import type { SampleStatus } from '../../types/samples'
 import { SAMPLE_STATUS_LABELS } from '../../types/samples'
 
@@ -16,7 +16,7 @@ interface Props {
 
 export default function SampleStatusBadge({ status }: Props) {
   return (
-    <Chip color={COLOR[status]} size="sm" variant="soft">
+    <Chip color={COLOR[status]} variant="soft" className="text-xs px-2.5 py-0.5">
       {SAMPLE_STATUS_LABELS[status]}
     </Chip>
   )

@@ -76,7 +76,7 @@ export default function SampleDetailModal({ sample, onClose }: Props) {
           <ModalHeader className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <ModalHeading className="font-mono">{sample.code}</ModalHeading>
-              <Chip color={STATUS_COLOR[sample.status]} size="sm" variant="soft">
+              <Chip color={STATUS_COLOR[sample.status]} variant="soft" className="text-xs px-2.5 py-0.5">
                 {SAMPLE_STATUS_LABELS[sample.status]}
               </Chip>
             </div>
@@ -160,7 +160,7 @@ export default function SampleDetailModal({ sample, onClose }: Props) {
                             {EVENT_LABELS[event.eventType] ?? event.eventType}
                           </span>
                           {event.newStatus && (
-                            <Chip size="sm" color={STATUS_COLOR[event.newStatus as SampleStatus] ?? 'default'} variant="soft">
+                            <Chip color={STATUS_COLOR[event.newStatus as SampleStatus] ?? 'default'} variant="soft" className="text-xs px-2.5 py-0.5">
                               {SAMPLE_STATUS_LABELS[event.newStatus as SampleStatus] ?? event.newStatus}
                             </Chip>
                           )}

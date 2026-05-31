@@ -1,4 +1,4 @@
-import { Chip } from '@heroui/react'
+﻿import { Chip } from '@heroui/react'
 import type { ExperimentStatus } from '../../types/protocols'
 import { EXPERIMENT_STATUS_LABELS } from '../../types/protocols'
 
@@ -11,7 +11,7 @@ const COLOR: Record<ExperimentStatus, 'default' | 'primary' | 'success' | 'dange
 
 export default function ExperimentStatusBadge({ status }: { status: ExperimentStatus }) {
   return (
-    <Chip color={COLOR[status]} size="sm" variant="soft">
+    <Chip color={COLOR[status]} variant="soft" className="text-xs px-2.5 py-0.5">
       {EXPERIMENT_STATUS_LABELS[status]}
     </Chip>
   )

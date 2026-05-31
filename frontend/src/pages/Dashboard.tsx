@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+﻿import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, Spinner, Chip } from '@heroui/react'
 import { FlaskConical, Beaker, ClipboardList, BarChart3, AlertTriangle } from 'lucide-react'
@@ -119,7 +119,7 @@ export default function Dashboard() {
                       <span className="text-sm font-medium text-foreground font-mono">{event.sampleCode}</span>
                       <span className="text-xs text-muted">{event.sampleType}</span>
                       {event.newStatus && (
-                        <Chip size="sm" color={STATUS_COLOR[event.newStatus as SampleStatus] ?? 'default'} variant="soft">
+                        <Chip color={STATUS_COLOR[event.newStatus as SampleStatus] ?? 'default'} variant="soft">
                           {SAMPLE_STATUS_LABELS[event.newStatus as SampleStatus] ?? event.newStatus}
                         </Chip>
                       )}

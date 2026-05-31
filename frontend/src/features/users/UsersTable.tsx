@@ -1,4 +1,4 @@
-import {
+﻿import {
   Button, Spinner, Chip,
   TableRoot, TableContent, TableHeader, TableBody, TableRow, TableColumn, TableCell,
 } from '@heroui/react'
@@ -51,10 +51,10 @@ export default function UsersTable({ onEdit }: Props) {
                   </TableCell>
                   <TableCell className="px-4 py-3 text-muted text-sm">{u.email}</TableCell>
                   <TableCell className="px-4 py-3">
-                    <Chip color={ROLE_COLOR[u.role]} size="sm" variant="soft">{ROLE_LABELS[u.role]}</Chip>
+                    <Chip color={ROLE_COLOR[u.role]} variant="soft" className="text-xs px-2.5 py-0.5">{ROLE_LABELS[u.role]}</Chip>
                   </TableCell>
                   <TableCell className="px-4 py-3">
-                    <Chip color={u.isActive ? 'success' : 'default'} size="sm" variant="soft">
+                    <Chip color={u.isActive ? 'success' : 'default'} variant="soft" className="text-xs px-2.5 py-0.5">
                       {u.isActive ? 'Aktivan' : 'Neaktivan'}
                     </Chip>
                   </TableCell>

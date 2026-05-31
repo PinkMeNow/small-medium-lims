@@ -40,7 +40,7 @@ export default function ProtocolDetailModal({ protocol, onClose }: Props) {
           <ModalHeader className="flex items-center justify-between">
             <div className="flex items-center gap-3 min-w-0">
               <ModalHeading className="truncate">{protocol.name}</ModalHeading>
-              <Chip size="sm" variant="soft" color="primary" className="shrink-0">
+              <Chip variant="soft" color="primary" className="shrink-0 text-xs px-2.5 py-0.5">
                 v{protocol.currentVersion}
               </Chip>
             </div>
