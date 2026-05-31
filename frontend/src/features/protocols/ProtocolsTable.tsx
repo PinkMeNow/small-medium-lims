@@ -1,6 +1,9 @@
 import { useState } from 'react'
-import { Button, Spinner } from '@heroui/react'
-import { Search, ChevronLeft, ChevronRight, FlaskConical, Tag } from 'lucide-react'
+import {
+  Button, Spinner,
+  SearchField, SearchFieldGroup, SearchFieldSearchIcon, SearchFieldInput, SearchFieldClearButton,
+} from '@heroui/react'
+import { ChevronLeft, ChevronRight, FlaskConical, Tag } from 'lucide-react'
 import { useProtocols } from './hooks'
 import { format } from 'date-fns'
 import { hr } from 'date-fns/locale'
@@ -17,26 +20,24 @@ export default function ProtocolsTable({ onRunExperiment }: Props) {
 
   const { data, isLoading, isError } = useProtocols({ page, limit: 20, search })
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault(); setSearch(searchInput); setPage(1)
-  }
+  function handleSearch() { setSearch(searchInput); setPage(1) }
 
   const total = data?.meta.total ?? 0
   const totalPages = Math.ceil(total / 20)
+  const COLUMNS = ['Naziv', 'Kategorija', 'Verzija', 'Koraci', 'Eksperimenti', 'Kreirao/la', 'Kreirano', '']
 
   return (
     <div className="flex flex-col gap-4">
-      <form onSubmit={handleSearch} className="flex gap-2 max-w-md">
-        <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted pointer-events-none" />
-          <input
-            type="text" value={searchInput} onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Pretraži po nazivu ili kategoriji..."
-            className="w-full pl-9 pr-3 py-2 rounded-xl bg-field-background border border-field-border text-field-foreground text-sm placeholder:text-field-placeholder focus:outline-none focus:border-accent"
-          />
-        </div>
-        <Button type="submit" variant="outline" size="sm">Traži</Button>
-      </form>
+      <div className="flex gap-2 max-w-md">
+        <SearchField value={searchInput} onChange={setSearchInput} onSubmit={handleSearch} className="flex-1">
+          <SearchFieldGroup>
+            <SearchFieldSearchIcon />
+            <SearchFieldInput placeholder="Pretraži po nazivu ili kategoriji..." />
+            <SearchFieldClearButton />
+          </SearchFieldGroup>
+        </SearchField>
+        <Button variant="outline" size="sm" onClick={handleSearch}>Traži</Button>
+      </div>
 
       <div className="overflow-x-auto rounded-xl border border-border bg-surface">
         {isLoading ? (
@@ -51,10 +52,10 @@ export default function ProtocolsTable({ onRunExperiment }: Props) {
             <p className="text-sm text-muted">Nema protokola. Dodajte prvi SOP.</p>
           </div>
         ) : (
-          <table className="w-full text-sm">
+          <table aria-label="Lista protokola" className="w-full">
             <thead className="border-b border-border bg-surface-secondary">
               <tr>
-                {['Naziv', 'Kategorija', 'Verzija', 'Koraci', 'Eksperimeti', 'Kreirao/la', 'Kreirano', ''].map((h) => (
+                {COLUMNS.map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider whitespace-nowrap">{h}</th>
                 ))}
               </tr>
@@ -89,9 +90,7 @@ export default function ProtocolsTable({ onRunExperiment }: Props) {
                     {format(new Date(p.createdAt), 'd. MMM yyyy.', { locale: hr })}
                   </td>
                   <td className="px-4 py-3">
-                    <Button variant="outline" size="sm" onClick={() => onRunExperiment?.(p)}>
-                      Pokreni
-                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => onRunExperiment?.(p)}>Pokreni</Button>
                   </td>
                 </tr>
               ))}

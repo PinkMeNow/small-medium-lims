@@ -3,7 +3,10 @@ import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
   ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalCloseTrigger,
-  CloseButton, TextField, Label, Input, useOverlayState,
+  CloseButton, TextField, Label, Input, TextArea,
+  Select, SelectTrigger, SelectValue, SelectIndicator, SelectPopover,
+  ListBox, ListBoxItem,
+  useOverlayState,
 } from '@heroui/react'
 import { Plus, Trash2, GripVertical } from 'lucide-react'
 import { useCreateProtocol } from './hooks'
@@ -100,18 +103,26 @@ export default function ProtocolForm() {
                   <Input placeholder="npr. Analiza pH vrijednosti vode" className="mt-1" />
                 </TextField>
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-foreground">Kategorija</label>
-                  <select value={category} onChange={(e) => setCategory(e.target.value)} className={`${inputCls} mt-1`}>
-                    <option value="">— Odaberi —</option>
-                    {PROTOCOL_CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                  </select>
+                  <Label className="text-sm font-medium text-foreground">Kategorija</Label>
+                  <Select selectedKey={category || 'none'} onSelectionChange={(key) => setCategory(key === 'none' ? '' : String(key))}>
+                    <SelectTrigger className="mt-1 w-full">
+                      <SelectValue placeholder="— Odaberi —" />
+                      <SelectIndicator />
+                    </SelectTrigger>
+                    <SelectPopover>
+                      <ListBox>
+                        <ListBoxItem id="none">— Odaberi —</ListBoxItem>
+                        {PROTOCOL_CATEGORIES.map((c) => <ListBoxItem key={c} id={c}>{c}</ListBoxItem>)}
+                      </ListBox>
+                    </SelectPopover>
+                  </Select>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-foreground">Opis <span className="text-muted font-normal">(neobavezno)</span></label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} className={`${inputCls} resize-none`} placeholder="Kratki opis svrhe ovog protokola..." />
-              </div>
+              <TextField value={description} onChange={setDescription}>
+                <Label className="text-sm font-medium text-foreground">Opis <span className="text-muted font-normal">(neobavezno)</span></Label>
+                <TextArea rows={2} placeholder="Kratki opis svrhe ovog protokola..." className="mt-1" />
+              </TextField>
 
               {/* Koraci */}
               <div className="flex flex-col gap-3">
@@ -132,25 +143,26 @@ export default function ProtocolForm() {
                           <span className="text-xs font-mono font-semibold text-accent bg-accent-soft px-2 py-0.5 rounded-md shrink-0">
                             {step.stepNumber}
                           </span>
-                          <input
-                            value={step.title}
-                            onChange={(e) => updateStep(i, 'title', e.target.value)}
-                            placeholder="Naslov koraka"
-                            className="flex-1 px-2 py-1 rounded-lg bg-field-background border border-field-border text-sm text-foreground focus:outline-none focus:border-accent"
-                          />
+                          <TextField value={step.title} onChange={(v) => updateStep(i, 'title', v)} className="flex-1">
+                            <Input placeholder="Naslov koraka" className="px-2 py-1 text-sm" />
+                          </TextField>
                         </div>
-                        <textarea
-                          value={step.description}
-                          onChange={(e) => updateStep(i, 'description', e.target.value)}
-                          rows={2}
-                          placeholder="Detaljni opis koraka..."
-                          className={`${inputCls} resize-none text-xs`}
-                        />
+                        <TextField value={step.description} onChange={(v) => updateStep(i, 'description', v)}>
+                          <TextArea rows={2} placeholder="Detaljni opis koraka..." className="text-xs" />
+                        </TextField>
                       </div>
                       {steps.length > 1 && (
-                        <button onClick={() => removeStep(i)} className="text-danger hover:text-danger-hover shrink-0 pt-1">
+                        <Button
+                          variant="ghost"
+                          isIconOnly
+                          size="sm"
+                          color="danger"
+                          onClick={() => removeStep(i)}
+                          className="shrink-0 mt-1"
+                          aria-label="Ukloni korak"
+                        >
                           <Trash2 size={15} />
-                        </button>
+                        </Button>
                       )}
                     </div>
                   ))}
@@ -159,21 +171,21 @@ export default function ProtocolForm() {
 
               {/* Materijali i oprema */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-foreground">Potrebni materijali <span className="text-muted font-normal">(jedan po retku)</span></label>
-                  <textarea value={materials} onChange={(e) => setMaterials(e.target.value)} rows={3} className={`${inputCls} resize-none text-xs`} placeholder="npr. HCl 0.1M&#10;pH metar&#10;Odmjerna tikvica 100mL" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-foreground">Potrebna oprema <span className="text-muted font-normal">(jedan po retku)</span></label>
-                  <textarea value={equipment} onChange={(e) => setEquipment(e.target.value)} rows={3} className={`${inputCls} resize-none text-xs`} placeholder="npr. Analitička vaga&#10;Spektrofotometar" />
-                </div>
+                <TextField value={materials} onChange={setMaterials}>
+                  <Label className="text-sm font-medium text-foreground">Potrebni materijali <span className="text-muted font-normal">(jedan po retku)</span></Label>
+                  <TextArea rows={3} placeholder={'npr. HCl 0.1M\npH metar\nOdmjerna tikvica 100mL'} className="mt-1 text-xs" />
+                </TextField>
+                <TextField value={equipment} onChange={setEquipment}>
+                  <Label className="text-sm font-medium text-foreground">Potrebna oprema <span className="text-muted font-normal">(jedan po retku)</span></Label>
+                  <TextArea rows={3} placeholder={'npr. Analitička vaga\nSpektrofotometar'} className="mt-1 text-xs" />
+                </TextField>
               </div>
 
               {/* Očekivani rezultati */}
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-foreground">Očekivani rezultati <span className="text-muted font-normal">(neobavezno)</span></label>
-                <textarea value={expectedResults} onChange={(e) => setExpectedResults(e.target.value)} rows={2} className={`${inputCls} resize-none`} placeholder="Što treba dobiti nakon uspješno provedenog protokola..." />
-              </div>
+              <TextField value={expectedResults} onChange={setExpectedResults}>
+                <Label className="text-sm font-medium text-foreground">Očekivani rezultati <span className="text-muted font-normal">(neobavezno)</span></Label>
+                <TextArea rows={2} placeholder="Što treba dobiti nakon uspješno provedenog protokola..." className="mt-1" />
+              </TextField>
 
               {greška && <p className="text-sm text-danger">{greška}</p>}
             </ModalBody>

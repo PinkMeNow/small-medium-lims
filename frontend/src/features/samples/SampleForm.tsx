@@ -3,7 +3,9 @@ import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
   ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalCloseTrigger,
-  CloseButton, TextField, Label, Input,
+  CloseButton, TextField, Label, Input, TextArea,
+  Select, SelectTrigger, SelectValue, SelectIndicator, SelectPopover,
+  ListBox, ListBoxItem,
   useOverlayState,
 } from '@heroui/react'
 import { Plus } from 'lucide-react'
@@ -65,16 +67,20 @@ export default function SampleForm() {
             <ModalBody className="flex flex-col gap-4 py-4">
               {/* Vrsta */}
               <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-foreground">Vrsta uzorka</label>
-                <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-field-background border border-field-border text-field-foreground text-sm focus:outline-none focus:border-accent"
-                >
-                  {SAMPLE_TYPES.map((t) => (
-                    <option key={t} value={t}>{t}</option>
-                  ))}
-                </select>
+                <Label className="text-sm font-medium text-foreground">Vrsta uzorka</Label>
+                <Select selectedKey={type} onSelectionChange={(key) => setType(String(key))}>
+                  <SelectTrigger className="mt-1 w-full">
+                    <SelectValue />
+                    <SelectIndicator />
+                  </SelectTrigger>
+                  <SelectPopover>
+                    <ListBox>
+                      {SAMPLE_TYPES.map((t) => (
+                        <ListBoxItem key={t} id={t}>{t}</ListBoxItem>
+                      ))}
+                    </ListBox>
+                  </SelectPopover>
+                </Select>
               </div>
 
               {/* Izvor */}
@@ -87,18 +93,12 @@ export default function SampleForm() {
               </TextField>
 
               {/* Bilješka */}
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-foreground">
+              <TextField value={notes} onChange={setNotes}>
+                <Label className="text-sm font-medium text-foreground">
                   Bilješka <span className="text-muted font-normal">(neobavezno)</span>
-                </label>
-                <textarea
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  rows={3}
-                  placeholder="Dodatne informacije o uzorku..."
-                  className="w-full px-3 py-2 rounded-xl bg-field-background border border-field-border text-field-foreground text-sm resize-none focus:outline-none focus:border-accent"
-                />
-              </div>
+                </Label>
+                <TextArea rows={3} placeholder="Dodatne informacije o uzorku..." className="mt-1" />
+              </TextField>
 
               {greška && <p className="text-sm text-danger">{greška}</p>}
             </ModalBody>

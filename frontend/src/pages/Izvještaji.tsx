@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Button, Spinner, Separator } from '@heroui/react'
+import {
+  Button, Spinner, Separator,
+  Select, SelectTrigger, SelectValue, SelectIndicator, SelectPopover,
+  ListBox, ListBoxItem,
+  TextField, Label, Input,
+} from '@heroui/react'
 import { FlaskConical, Beaker, ClipboardList, Search, Download, Printer } from 'lucide-react'
 import { format } from 'date-fns'
 import { hr } from 'date-fns/locale'
@@ -72,10 +77,18 @@ function SamplesReport() {
         </div>
         <div className="flex flex-col gap-1">
           <label className="text-xs text-muted">Status</label>
-          <select value={status} onChange={(e) => setStatus(e.target.value)} className={inputCls}>
-            <option value="">Svi</option>
-            {Object.entries(SAMPLE_STATUS_LABELS).map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-          </select>
+          <Select selectedKey={status || 'all'} onSelectionChange={(key) => setStatus(key === 'all' ? '' : String(key))}>
+            <SelectTrigger className="min-w-32">
+              <SelectValue />
+              <SelectIndicator />
+            </SelectTrigger>
+            <SelectPopover>
+              <ListBox>
+                <ListBoxItem id="all">Svi</ListBoxItem>
+                {Object.entries(SAMPLE_STATUS_LABELS).map(([v, l]) => <ListBoxItem key={v} id={v}>{l}</ListBoxItem>)}
+              </ListBox>
+            </SelectPopover>
+          </Select>
         </div>
         <Button variant="primary" size="sm" onClick={generate}>Generiraj</Button>
         {data && <Button variant="outline" size="sm" onClick={downloadCsv}><Download size={14} /> CSV</Button>}
@@ -282,15 +295,10 @@ function ChainOfCustody() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex gap-3 items-end">
-        <div className="flex flex-col gap-1 flex-1 max-w-sm">
-          <label className="text-xs text-muted">ID uzorka (UUID)</label>
-          <input
-            value={sampleId}
-            onChange={(e) => setSampleId(e.target.value)}
-            placeholder="npr. 550e8400-e29b-41d4-a716-..."
-            className={`${inputCls} w-full`}
-          />
-        </div>
+        <TextField value={sampleId} onChange={setSampleId} className="flex-1 max-w-sm">
+          <Label className="text-xs text-muted">ID uzorka (UUID)</Label>
+          <Input placeholder="npr. 550e8400-e29b-41d4-a716-..." className="mt-0.5" />
+        </TextField>
         <Button variant="primary" size="sm" onClick={() => setActiveId(sampleId)} isDisabled={!sampleId.trim()}>Pretraži</Button>
         {data && <Button variant="outline" size="sm" onClick={downloadCsv}><Download size={14} /> CSV</Button>}
         {data && <Button variant="outline" size="sm" onClick={() => window.print()}><Printer size={14} /> Ispiši</Button>}

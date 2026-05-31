@@ -3,7 +3,7 @@ import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
   ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalCloseTrigger,
-  CloseButton, TextField, Label, Input, useOverlayState,
+  CloseButton, TextField, Label, Input, TextArea, useOverlayState,
 } from '@heroui/react'
 import { useCreateExperiment } from './hooks'
 import type { Protocol } from '../../types/protocols'
@@ -69,10 +69,10 @@ export default function ExperimentModal({ protocol, onClose }: Props) {
               <Input className="mt-1" />
             </TextField>
 
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-foreground">Bilješka <span className="text-muted font-normal">(neobavezno)</span></label>
-              <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} className={`${inputCls} resize-none`} placeholder="Početne napomene..." />
-            </div>
+            <TextField value={notes} onChange={setNotes}>
+              <Label className="text-sm font-medium text-foreground">Bilješka <span className="text-muted font-normal">(neobavezno)</span></Label>
+              <TextArea rows={3} placeholder="Početne napomene..." className="mt-1" />
+            </TextField>
 
             {greška && <p className="text-sm text-danger">{greška}</p>}
           </ModalBody>

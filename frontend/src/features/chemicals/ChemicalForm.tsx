@@ -3,7 +3,10 @@ import {
   Button, Spinner,
   ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
   ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalCloseTrigger,
-  CloseButton, TextField, Label, Input,
+  CloseButton, TextField, Label, Input, TextArea,
+  Select, SelectTrigger, SelectValue, SelectIndicator, SelectPopover,
+  ListBox, ListBoxItem,
+  CheckboxGroup, Checkbox, CheckboxControl, CheckboxContent,
   useOverlayState,
 } from '@heroui/react'
 import { Plus } from 'lucide-react'
@@ -12,17 +15,6 @@ import { CHEMICAL_UNITS, GHS_INFO } from '../../types/chemicals'
 import type { GHSClass } from '../../types/chemicals'
 
 const GHS_CODES = Object.keys(GHS_INFO) as GHSClass[]
-
-function Field({ label, optional, children }: { label: string; optional?: boolean; children: React.ReactNode }) {
-  return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium text-foreground">
-        {label}{optional && <span className="text-muted font-normal ml-1">(neobavezno)</span>}
-      </label>
-      {children}
-    </div>
-  )
-}
 
 const inputCls = 'w-full px-3 py-2 rounded-xl bg-field-background border border-field-border text-field-foreground text-sm focus:outline-none focus:border-accent placeholder:text-field-placeholder'
 
@@ -42,12 +34,6 @@ export default function ChemicalForm() {
 
   function set(key: keyof typeof form, value: string) {
     setForm((f) => ({ ...f, [key]: value }))
-  }
-
-  function toggleGHS(code: GHSClass) {
-    setGhsClasses((prev) =>
-      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code],
-    )
   }
 
   function reset() {
@@ -126,34 +112,47 @@ export default function ChemicalForm() {
                 </TextField>
               </div>
 
-              {/* Datumi */}
+              {/* Datumi — native date inputs (HeroUI DateField koristi CalendarDate tip) */}
               <div className="grid grid-cols-2 gap-4">
-                <Field label="Datum nabave">
-                  <input type="date" value={form.purchaseDate} onChange={(e) => set('purchaseDate', e.target.value)} className={`${inputCls} mt-1`} />
-                </Field>
-                <Field label="Rok trajanja">
-                  <input type="date" value={form.expiryDate} onChange={(e) => set('expiryDate', e.target.value)} className={`${inputCls} mt-1`} />
-                </Field>
+                <TextField value={form.purchaseDate} onChange={(v) => set('purchaseDate', v)}>
+                  <Label className="text-sm font-medium text-foreground">Datum nabave</Label>
+                  <Input type="date" className="mt-1" />
+                </TextField>
+                <TextField value={form.expiryDate} onChange={(v) => set('expiryDate', v)}>
+                  <Label className="text-sm font-medium text-foreground">Rok trajanja</Label>
+                  <Input type="date" className="mt-1" />
+                </TextField>
               </div>
 
               {/* Količina */}
               <div className="grid grid-cols-3 gap-4">
                 <div className="col-span-1">
-                  <Field label="Količina">
-                    <input type="number" min="0" step="0.001" value={form.quantity} onChange={(e) => set('quantity', e.target.value)} className={`${inputCls} mt-1`} placeholder="0.000" />
-                  </Field>
+                  <TextField value={form.quantity} onChange={(v) => set('quantity', v)}>
+                    <Label className="text-sm font-medium text-foreground">Količina</Label>
+                    <Input type="number" min="0" step="0.001" placeholder="0.000" className="mt-1" />
+                  </TextField>
                 </div>
                 <div className="col-span-1">
-                  <Field label="Jedinica">
-                    <select value={form.unit} onChange={(e) => set('unit', e.target.value)} className={`${inputCls} mt-1`}>
-                      {CHEMICAL_UNITS.map((u) => <option key={u} value={u}>{u}</option>)}
-                    </select>
-                  </Field>
+                  <div className="flex flex-col gap-1">
+                    <Label className="text-sm font-medium text-foreground">Jedinica</Label>
+                    <Select selectedKey={form.unit} onSelectionChange={(key) => set('unit', String(key))}>
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue />
+                        <SelectIndicator />
+                      </SelectTrigger>
+                      <SelectPopover>
+                        <ListBox>
+                          {CHEMICAL_UNITS.map((u) => <ListBoxItem key={u} id={u}>{u}</ListBoxItem>)}
+                        </ListBox>
+                      </SelectPopover>
+                    </Select>
+                  </div>
                 </div>
                 <div className="col-span-1">
-                  <Field label="Min. zaliha" optional>
-                    <input type="number" min="0" step="0.001" value={form.minQuantity} onChange={(e) => set('minQuantity', e.target.value)} className={`${inputCls} mt-1`} placeholder="0" />
-                  </Field>
+                  <TextField value={form.minQuantity} onChange={(v) => set('minQuantity', v)}>
+                    <Label className="text-sm font-medium text-foreground">Min. zaliha <span className="text-muted font-normal">(neoob.)</span></Label>
+                    <Input type="number" min="0" step="0.001" placeholder="0" className="mt-1" />
+                  </TextField>
                 </div>
               </div>
 
@@ -166,33 +165,33 @@ export default function ChemicalForm() {
                   </TextField>
                 </div>
                 <div className="col-span-1">
-                  <Field label="Temp. min (°C)" optional>
-                    <input type="number" value={form.storageTempMin} onChange={(e) => set('storageTempMin', e.target.value)} className={`${inputCls} mt-1`} placeholder="-20" />
-                  </Field>
+                  <TextField value={form.storageTempMin} onChange={(v) => set('storageTempMin', v)}>
+                    <Label className="text-sm font-medium text-foreground">Temp. min (°C) <span className="text-muted font-normal">(neoob.)</span></Label>
+                    <Input type="number" placeholder="-20" className="mt-1" />
+                  </TextField>
                 </div>
                 <div className="col-span-1">
-                  <Field label="Temp. max (°C)" optional>
-                    <input type="number" value={form.storageTempMax} onChange={(e) => set('storageTempMax', e.target.value)} className={`${inputCls} mt-1`} placeholder="25" />
-                  </Field>
+                  <TextField value={form.storageTempMax} onChange={(v) => set('storageTempMax', v)}>
+                    <Label className="text-sm font-medium text-foreground">Temp. max (°C) <span className="text-muted font-normal">(neoob.)</span></Label>
+                    <Input type="number" placeholder="25" className="mt-1" />
+                  </TextField>
                 </div>
               </div>
 
               {/* GHS klase */}
-              <Field label="GHS klasifikacija" optional>
-                <div className="grid grid-cols-3 gap-2 mt-1">
-                  {GHS_CODES.map((code) => (
-                    <label key={code} className="flex items-center gap-2 cursor-pointer p-2 rounded-lg hover:bg-default transition-colors">
-                      <input
-                        type="checkbox"
-                        checked={ghsClasses.includes(code)}
-                        onChange={() => toggleGHS(code)}
-                        className="accent-accent"
-                      />
-                      <span className="text-xs text-foreground">{GHS_INFO[code].label}</span>
-                    </label>
-                  ))}
-                </div>
-              </Field>
+              <div className="flex flex-col gap-2">
+                <Label className="text-sm font-medium text-foreground">GHS klasifikacija <span className="text-muted font-normal">(neoob.)</span></Label>
+                <CheckboxGroup value={ghsClasses} onChange={(vals) => setGhsClasses(vals as GHSClass[])}>
+                  <div className="grid grid-cols-3 gap-1 mt-1">
+                    {GHS_CODES.map((code) => (
+                      <Checkbox key={code} value={code} className="p-2 rounded-lg hover:bg-default transition-colors">
+                        <CheckboxControl />
+                        <CheckboxContent className="text-xs text-foreground">{GHS_INFO[code].label}</CheckboxContent>
+                      </Checkbox>
+                    ))}
+                  </div>
+                </CheckboxGroup>
+              </div>
 
               {/* SDS URL */}
               <TextField value={form.sdsUrl} onChange={(v) => set('sdsUrl', v)}>
@@ -201,9 +200,10 @@ export default function ChemicalForm() {
               </TextField>
 
               {/* Bilješka */}
-              <Field label="Bilješka" optional>
-                <textarea value={form.notes} onChange={(e) => set('notes', e.target.value)} rows={2} className={`${inputCls} resize-none mt-1`} placeholder="Dodatne informacije..." />
-              </Field>
+              <TextField value={form.notes} onChange={(v) => set('notes', v)}>
+                <Label className="text-sm font-medium text-foreground">Bilješka <span className="text-muted font-normal">(neoob.)</span></Label>
+                <TextArea rows={2} placeholder="Dodatne informacije..." className="mt-1" />
+              </TextField>
 
               {greška && <p className="text-sm text-danger">{greška}</p>}
             </ModalBody>
