@@ -6,6 +6,8 @@ import { samplesRouter } from './features/samples/samples.router'
 import { chemicalsRouter } from './features/chemicals/chemicals.router'
 import { protocolsRouter, experimentsRouter } from './features/protocols/protocols.router'
 import { reportsRouter } from './features/reports/reports.router'
+import { usersRouter } from './features/users/users.router'
+import { dashboardRouter } from './features/dashboard/dashboard.router'
 import { errorMiddleware } from './middleware/error'
 import { env } from './lib/env'
 
@@ -28,5 +30,7 @@ app.use('/api/v1/chemicals', chemicalsRouter)
 app.use('/api/v1/protocols', protocolsRouter)
 app.use('/api/v1/experiments', experimentsRouter)
 app.use('/api/v1/reports', reportsRouter)
+app.use('/api/v1/users', usersRouter)
+app.use('/api/v1/dashboard', dashboardRouter)
 
 app.use(errorMiddleware)

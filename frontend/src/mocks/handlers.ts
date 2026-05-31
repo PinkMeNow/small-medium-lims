@@ -6,6 +6,7 @@ import {
 import type { Sample } from '../types/samples'
 import type { Chemical } from '../types/chemicals'
 import type { Experiment } from '../types/protocols'
+import type { AppUser, UserRole } from '../types/users'
 
 const BASE = 'http://localhost:3001/api/v1'
 
@@ -316,4 +317,80 @@ export const handlers = [
       })),
     })
   }),
+
+  // ─── Users (admin only) ──────────────────────────────────────────────────
+
+  http.get(`${BASE}/users`, async () => {
+    await delay(300)
+    return HttpResponse.json(mockUsers)
+  }),
+
+  http.post(`${BASE}/users`, async ({ request }) => {
+    await delay(500)
+    const body = await request.json() as any
+    const newUser: AppUser = {
+      id: uuid(), firstName: body.firstName, lastName: body.lastName,
+      email: body.email, role: body.role as UserRole,
+      isActive: true, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+    }
+    mockUsers = [newUser, ...mockUsers]
+    return HttpResponse.json({ user: newUser }, { status: 201 })
+  }),
+
+  http.patch(`${BASE}/users/:id/toggle-active`, async ({ params }) => {
+    await delay(300)
+    mockUsers = mockUsers.map(u => u.id === params.id ? { ...u, isActive: !u.isActive, updatedAt: new Date().toISOString() } : u)
+    return HttpResponse.json({ user: mockUsers.find(u => u.id === params.id) })
+  }),
+
+  http.patch(`${BASE}/users/:id`, async ({ params, request }) => {
+    await delay(400)
+    const body = await request.json() as any
+    mockUsers = mockUsers.map(u => u.id === params.id ? { ...u, ...body, updatedAt: new Date().toISOString() } : u)
+    return HttpResponse.json({ user: mockUsers.find(u => u.id === params.id) })
+  }),
+
+  // ─── Dashboard ────────────────────────────────────────────────────────────
+
+  http.get(`${BASE}/dashboard/stats`, async () => {
+    await delay(300)
+    const today = new Date(); today.setHours(0,0,0,0)
+    const soon = new Date(today); soon.setDate(soon.getDate() + 30)
+    return HttpResponse.json({
+      samplesInProgress: samples.filter(s => s.status === 'processing').length,
+      samplesTotal: samples.length,
+      chemicalsAlerts: chemicals.filter(c => {
+        const exp = new Date(c.expiryDate)
+        return exp <= soon || (Number(c.quantity) <= Number(c.minQuantity) && Number(c.minQuantity) > 0)
+      }).length,
+      activeProtocols: MOCK_PROTOCOLS.length,
+      experimentsThisMonth: experiments.filter(e => {
+        const d = new Date(e.startedAt)
+        const now = new Date()
+        return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()
+      }).length,
+    })
+  }),
+
+  http.get(`${BASE}/dashboard/activity`, async () => {
+    await delay(250)
+    const allEvents = Object.entries(MOCK_SAMPLE_EVENTS).flatMap(([sampleId, events]) => {
+      const sample = samples.find(s => s.id === sampleId)
+      return events.map((e: any) => ({
+        ...e,
+        sampleCode: sample?.code,
+        sampleType: sample?.type,
+        user: `${e.user.firstName} ${e.user.lastName}`,
+      }))
+    })
+    allEvents.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    return HttpResponse.json(allEvents.slice(0, 8))
+  }),
+]
+
+// Mock users state (mutable)
+let mockUsers: AppUser[] = [
+  { id: 'user-2', firstName: 'Marko', lastName: 'Horvat', email: 'marko@lims.hr', role: 'admin', isActive: true, createdAt: '2025-01-01T09:00:00Z', updatedAt: '2025-01-01T09:00:00Z' },
+  { id: 'user-1', firstName: 'Ana', lastName: 'Kovač', email: 'ana@lims.hr', role: 'lab_technician', isActive: true, createdAt: '2025-01-15T10:00:00Z', updatedAt: '2025-01-15T10:00:00Z' },
+  { id: 'user-3', firstName: 'Petra', lastName: 'Šimić', email: 'petra@lims.hr', role: 'viewer', isActive: true, createdAt: '2025-02-01T09:00:00Z', updatedAt: '2025-02-01T09:00:00Z' },
 ]
