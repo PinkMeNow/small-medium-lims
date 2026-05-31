@@ -10,6 +10,7 @@ import {
 } from '@heroui/react'
 import { useAuthStore } from '../../stores/auth.store'
 import { logout } from '../../api/auth.api'
+import UserAvatar from '../UserAvatar'
 
 const NAV = [
   { href: '/',           icon: LayoutDashboard, label: 'Nadzorna ploča', end: true },
@@ -114,15 +115,22 @@ export default function Sidebar({ collapsed, onToggle, isMobile, onMobileClose }
         )}
       </nav>
 
-      {/* User info */}
-      {!effectiveCollapsed && user && (
-        <div className="px-4 py-3 border-t border-border shrink-0">
-          <p className="text-sm font-medium text-foreground truncate">
-            {user.firstName} {user.lastName}
-          </p>
-          <p className="text-xs text-muted truncate">{user.email}</p>
-        </div>
-      )}
+      {/* User section — avatar always visible */}
+      <div className="border-t border-border shrink-0">
+        {user && (
+          <div className={['flex items-center gap-3 px-3 py-3', effectiveCollapsed ? 'justify-center' : ''].join(' ')}>
+            <UserAvatar user={user} size="sm" className="shrink-0" />
+            {!effectiveCollapsed && (
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-foreground truncate leading-tight">
+                  {user.firstName} {user.lastName}
+                </p>
+                <p className="text-xs text-muted truncate">{user.email}</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Logout + collapse */}
       <div className="border-t border-border p-2 shrink-0 flex flex-col gap-1">
@@ -138,7 +146,6 @@ export default function Sidebar({ collapsed, onToggle, isMobile, onMobileClose }
           {!effectiveCollapsed && 'Odjava'}
         </Button>
 
-        {/* Collapse toggle — desktop only */}
         {!isMobile && (
           <Button
             variant="ghost"
