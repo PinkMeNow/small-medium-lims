@@ -2,10 +2,10 @@ import {
   Button, Spinner, Chip,
   TableRoot, TableContent, TableHeader, TableBody, TableRow, TableColumn, TableCell,
 } from '@heroui/react'
-import { UserCheck, UserX } from 'lucide-react'
+import { UserCheck, UserX, Pencil } from 'lucide-react'
 import { useUsers, useToggleUserActive } from './hooks'
 import { ROLE_LABELS } from '../../types/users'
-import type { UserRole } from '../../types/users'
+import type { UserRole, AppUser } from '../../types/users'
 import { useAuthStore } from '../../stores/auth.store'
 import { format } from 'date-fns'
 import { hr } from 'date-fns/locale'
@@ -16,7 +16,9 @@ const ROLE_COLOR: Record<UserRole, 'primary' | 'warning' | 'default'> = {
   viewer: 'default',
 }
 
-export default function UsersTable() {
+interface Props { onEdit?: (user: AppUser) => void }
+
+export default function UsersTable({ onEdit }: Props) {
   const { data, isLoading, isError } = useUsers()
   const toggleActive = useToggleUserActive()
   const currentUser = useAuthStore(s => s.user)
@@ -60,6 +62,10 @@ export default function UsersTable() {
                     {format(new Date(u.createdAt), 'd. MMM yyyy.', { locale: hr })}
                   </TableCell>
                   <TableCell className="px-4 py-3">
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="sm" isIconOnly onClick={() => onEdit?.(u)} title="Uredi">
+                        <Pencil size={15} className="text-muted" />
+                      </Button>
                     {u.id !== currentUser?.id && (
                       <Button
                         variant="ghost"
@@ -72,6 +78,7 @@ export default function UsersTable() {
                         {u.isActive ? <UserX size={16} /> : <UserCheck size={16} />}
                       </Button>
                     )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}

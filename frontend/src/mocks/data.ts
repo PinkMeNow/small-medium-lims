@@ -27,7 +27,9 @@ export const MOCK_SAMPLES: Sample[] = [
 ]
 
 export const MOCK_SAMPLE_EVENTS: Record<string, any[]> = {
-  'smp-1': [{ id: 'ev-1', sampleId: 'smp-1', eventType: 'created', newStatus: 'received', notes: null, createdAt: '2025-05-28T08:30:00Z', user: ANA }],
+  'smp-1': [
+    { id: 'ev-1', sampleId: 'smp-1', eventType: 'created', newStatus: 'received', notes: null, createdAt: '2025-05-28T08:30:00Z', user: ANA },
+  ],
   'smp-2': [
     { id: 'ev-2', sampleId: 'smp-2', eventType: 'created', newStatus: 'received', notes: null, createdAt: '2025-05-27T10:00:00Z', user: ANA },
     { id: 'ev-3', sampleId: 'smp-2', eventType: 'status_change', oldStatus: 'received', newStatus: 'processing', notes: 'Krenula analiza pH i kloridnih iona.', createdAt: '2025-05-27T14:00:00Z', user: ANA },
@@ -35,7 +37,32 @@ export const MOCK_SAMPLE_EVENTS: Record<string, any[]> = {
   'smp-3': [
     { id: 'ev-4', sampleId: 'smp-3', eventType: 'created', newStatus: 'received', notes: null, createdAt: '2025-05-25T09:15:00Z', user: ADMIN },
     { id: 'ev-5', sampleId: 'smp-3', eventType: 'status_change', oldStatus: 'received', newStatus: 'processing', notes: null, createdAt: '2025-05-25T11:00:00Z', user: ANA },
-    { id: 'ev-6', sampleId: 'smp-3', eventType: 'status_change', oldStatus: 'processing', newStatus: 'analysed', notes: 'Analiza završena. Rezultati u normi.', createdAt: '2025-05-26T16:00:00Z', user: ANA },
+    { id: 'ev-6', sampleId: 'smp-3', eventType: 'status_change', oldStatus: 'processing', newStatus: 'analysed', notes: 'Analiza završena. Rezultati u normi (pH = 7.1, Cl⁻ = 38 mg/L).', createdAt: '2025-05-26T16:00:00Z', user: ANA },
+  ],
+  'smp-4': [
+    { id: 'ev-7', sampleId: 'smp-4', eventType: 'created', newStatus: 'received', notes: 'Uzorak svježeg mlijeka iz tvorničke linije.', createdAt: '2025-05-20T11:00:00Z', user: ANA },
+    { id: 'ev-8', sampleId: 'smp-4', eventType: 'status_change', oldStatus: 'received', newStatus: 'processing', notes: null, createdAt: '2025-05-20T13:00:00Z', user: ANA },
+    { id: 'ev-9', sampleId: 'smp-4', eventType: 'status_change', oldStatus: 'processing', newStatus: 'analysed', notes: 'Mikrobiološka analiza uredna. Nema patogena.', createdAt: '2025-05-21T10:00:00Z', user: ADMIN },
+    { id: 'ev-10', sampleId: 'smp-4', eventType: 'status_change', oldStatus: 'analysed', newStatus: 'archived', notes: 'Arhivirano sukladno HACCP proceduri.', createdAt: '2025-05-22T09:00:00Z', user: ANA },
+  ],
+  'smp-5': [
+    { id: 'ev-11', sampleId: 'smp-5', eventType: 'created', newStatus: 'received', notes: 'Uzorkovanje na terenu — bunarska voda Samobor.', createdAt: '2025-05-29T07:45:00Z', user: ANA },
+  ],
+  'smp-6': [
+    { id: 'ev-12', sampleId: 'smp-6', eventType: 'created', newStatus: 'received', notes: null, createdAt: '2025-05-26T13:00:00Z', user: ADMIN },
+    { id: 'ev-13', sampleId: 'smp-6', eventType: 'status_change', oldStatus: 'received', newStatus: 'processing', notes: 'Uzorci zraka sakupljeni u 3 replike.', createdAt: '2025-05-27T08:00:00Z', user: ANA },
+    { id: 'ev-14', sampleId: 'smp-6', eventType: 'note_added', notes: 'Temperatura na terenu bila 28°C, vjetar JI 15 km/h. Uzeti u obzir pri interpretaciji.', createdAt: '2025-05-27T09:30:00Z', user: ADMIN },
+  ],
+  'smp-7': [
+    { id: 'ev-15', sampleId: 'smp-7', eventType: 'created', newStatus: 'received', notes: 'Bris površine — kuhinja OB Rebro, radna ploča.', createdAt: '2025-05-24T14:30:00Z', user: ANA },
+    { id: 'ev-16', sampleId: 'smp-7', eventType: 'status_change', oldStatus: 'received', newStatus: 'processing', notes: null, createdAt: '2025-05-24T15:00:00Z', user: ANA },
+    { id: 'ev-17', sampleId: 'smp-7', eventType: 'status_change', oldStatus: 'processing', newStatus: 'analysed', notes: 'Enterobaktericeje: 0 CFU/cm². Staph. aureus: nije detektiran. ZADOVOLJAVA.', createdAt: '2025-05-25T11:00:00Z', user: ADMIN },
+  ],
+  'smp-8': [
+    { id: 'ev-18', sampleId: 'smp-8', eventType: 'created', newStatus: 'received', notes: 'Otpadna voda, industrijska zona Žitnjak.', createdAt: '2025-05-15T09:00:00Z', user: ADMIN },
+    { id: 'ev-19', sampleId: 'smp-8', eventType: 'status_change', oldStatus: 'received', newStatus: 'processing', notes: null, createdAt: '2025-05-15T11:00:00Z', user: ANA },
+    { id: 'ev-20', sampleId: 'smp-8', eventType: 'status_change', oldStatus: 'processing', newStatus: 'analysed', notes: 'Visoka koncentracija teških metala (Pb, Cd). PREKORAČENA MDK. Obavještena inspekcija.', createdAt: '2025-05-16T14:00:00Z', user: ADMIN },
+    { id: 'ev-21', sampleId: 'smp-8', eventType: 'status_change', oldStatus: 'analysed', newStatus: 'destroyed', notes: 'Uzorak zbrinut sukladno propisu o opasnom otpadu (NN 57/96).', createdAt: '2025-05-18T10:00:00Z', user: ADMIN },
   ],
 }
 
