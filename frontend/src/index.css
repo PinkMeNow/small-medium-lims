@@ -59,7 +59,6 @@
 /* Table: transparent background so outer container border-radius is visible in all corners */
 [data-slot="table"],
 [data-slot="table-content"],
-[data-slot="table-header"],
 [data-slot="table-body"] {
   background: transparent !important;
 }
