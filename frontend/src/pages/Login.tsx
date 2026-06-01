@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Card, CardContent, Input, Label, Spinner, TextField } from '@heroui/react'
-import { FlaskConical } from 'lucide-react'
+import AppIcon from '../components/AppIcon'
 import { useAuthStore } from '../stores/auth.store'
 import { login } from '../api/auth.api'
 
@@ -33,9 +33,7 @@ export default function Login() {
       <div className="w-full max-w-sm flex flex-col gap-6">
 
         <div className="flex flex-col items-center gap-2">
-          <div className="p-3 rounded-xl bg-accent-soft text-accent">
-            <FlaskConical size={28} />
-          </div>
+          <AppIcon size={52} className="text-accent" />
           <h1 className="text-2xl font-semibold text-foreground tracking-tight">LIMS</h1>
           <p className="text-sm text-muted">Laboratorijski informacijski sustav</p>
         </div>
