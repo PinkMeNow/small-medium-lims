@@ -63,11 +63,20 @@
   background: transparent !important;
 }
 
-/* Table header: explicitly grey */
+/* Table header: explicitly grey + rounded top corners to match container */
 [data-slot="table-header"],
 [data-slot="table-header"] tr,
 [data-slot="table-header"] [data-slot="table-row"] {
   background-color: var(--surface-secondary) !important;
+}
+/* First and last th in header get matching border-radius */
+[data-slot="table-header"] th:first-child,
+[data-slot="table-header"] [data-slot="table-column"]:first-child {
+  border-top-left-radius: 0.75rem !important;
+}
+[data-slot="table-header"] th:last-child,
+[data-slot="table-header"] [data-slot="table-column"]:last-child {
+  border-top-right-radius: 0.75rem !important;
 }
 
 /* Force modal containers to cover full viewport and center content */
