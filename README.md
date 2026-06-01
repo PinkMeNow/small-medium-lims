@@ -68,6 +68,15 @@ Otvori `http://localhost:5173` u browseru.
 
 > **Bez backsenda radi odmah!** Frontend automatski koristi MSW (Mock Service Worker) koji simulira backend s testnim podacima. Sve funkcionalnosti su dostupne bez PostgreSQL-a.
 
+**Mock korisnici (development mod — bez pravog backsenda):**
+
+| Korisnik | Email | Lozinka | Uloga |
+|---|---|---|---|
+| **Ana Kovač** | `ana@lims.hr` | *(automatska prijava — nema lozinke)* | Laborant |
+| Marko Horvat | — | — | Administrator *(prikazan u podacima)* |
+
+> MSW automatski prijavljuje Ana Kovač pri pokretanju — nema potrebe za ručnom prijavom u dev modu.
+
 **Terminal 2 — Backend (opcionalno, samo ako trebaš pravi backend):**
 ```bash
 cd backend
