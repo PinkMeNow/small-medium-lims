@@ -52,7 +52,7 @@ export default function ProtocolsTable({ onRunExperiment, onViewDetail, onNewVer
         <Button variant="outline" size="sm" onClick={() => { setSearch(searchInput); setPage(1) }}>Traži</Button>
       </div>
 
-      <div className="rounded-xl border border-border bg-surface overflow-hidden"><div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-xl border border-border bg-surface">
         {isLoading ? (
           <div className="flex items-center justify-center py-16"><Spinner size="lg" /></div>
         ) : isError ? (
@@ -126,7 +126,7 @@ export default function ProtocolsTable({ onRunExperiment, onViewDetail, onNewVer
             </TableContent>
           </TableRoot>
         )}
-      </div></div>
+      </div>
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between">

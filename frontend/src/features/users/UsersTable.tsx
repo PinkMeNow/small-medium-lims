@@ -24,7 +24,7 @@ export default function UsersTable({ onEdit }: Props) {
   const currentUser = useAuthStore(s => s.user)
 
   return (
-    <div className="rounded-xl border border-border bg-surface overflow-hidden"><div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-xl border border-border bg-surface">
       {isLoading ? (
         <div className="flex items-center justify-center py-16"><Spinner size="lg" /></div>
       ) : isError ? (
@@ -86,6 +86,6 @@ export default function UsersTable({ onEdit }: Props) {
           </TableContent>
         </TableRoot>
       )}
-    </div></div>
+    </div>
   )
 }
