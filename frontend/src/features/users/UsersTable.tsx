@@ -24,7 +24,7 @@ export default function UsersTable({ onEdit }: Props) {
   const currentUser = useAuthStore(s => s.user)
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+    <div className="overflow-x-auto rounded-xl border border-border bg-surface-secondary">
       {isLoading ? (
         <div className="flex items-center justify-center py-16"><Spinner size="lg" /></div>
       ) : isError ? (

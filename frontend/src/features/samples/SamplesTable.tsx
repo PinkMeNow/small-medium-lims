@@ -121,7 +121,7 @@ export default function SamplesTable({ onRowClick }: Props) {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+      <div className="overflow-x-auto rounded-xl border border-border bg-surface-secondary">
         {isLoading ? (
           <div className="flex items-center justify-center py-16"><Spinner size="lg" /></div>
         ) : isError ? (
