@@ -41,15 +41,13 @@ function SamplesReport() {
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
   const [status, setStatus] = useState('')
-  const [params, setParams] = useState<{ from?: string; to?: string; status?: string }>({})
+
+  const params = { from: from || undefined, to: to || undefined, status: status || undefined }
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['report-samples', params],
     queryFn: () => getSamplesReport(params),
-    enabled: true,
   })
-
-  function generate() { setParams({ from: from || undefined, to: to || undefined, status: status || undefined }) }
 
   function downloadCsv() {
     if (!data) return
@@ -90,7 +88,6 @@ function SamplesReport() {
             </SelectPopover>
           </Select>
         </div>
-        <Button variant="primary" size="sm" onClick={generate}>Generiraj</Button>
         {data && <Button variant="outline" size="sm" onClick={downloadCsv}><Download size={14} /> CSV</Button>}
         {data && <Button variant="outline" size="sm" onClick={() => window.print()}><Printer size={14} /> Ispiši</Button>}
       </div>
@@ -194,15 +191,13 @@ function ChemicalsReport() {
 function ExperimentsReport() {
   const [from, setFrom] = useState('')
   const [to, setTo] = useState('')
-  const [params, setParams] = useState<{ from?: string; to?: string }>({})
+
+  const params = { from: from || undefined, to: to || undefined }
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['report-experiments', params],
     queryFn: () => getExperimentsReport(params),
-    enabled: true,
   })
-
-  function generate() { setParams({ from: from || undefined, to: to || undefined }) }
 
   function downloadCsv() {
     if (!data) return
@@ -228,7 +223,6 @@ function ExperimentsReport() {
           <label className="text-xs text-muted">Datum do</label>
           <input type="date" value={to} onChange={(e) => setTo(e.target.value)} className={inputCls} />
         </div>
-        <Button variant="primary" size="sm" onClick={generate}>Generiraj</Button>
         {data && <Button variant="outline" size="sm" onClick={downloadCsv}><Download size={14} /> CSV</Button>}
         {data && <Button variant="outline" size="sm" onClick={() => window.print()}><Printer size={14} /> Ispiši</Button>}
       </div>
