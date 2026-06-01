@@ -51,12 +51,11 @@ export default function ChemicalQuantityModal({ chemical, onClose }: Props) {
 
   return (
     <ModalRoot state={modal}>
-      <ModalBackdrop />
-      <ModalContainer size="sm" className="fixed inset-0 z-50 overflow-y-auto flex flex-col p-2 sm:p-4">
+      {modal.isOpen && <ModalBackdrop />}
+      <ModalContainer size="sm" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
         <ModalDialog>
           <ModalHeader className="flex items-center justify-between">
             <ModalHeading>Ažuriraj količinu</ModalHeading>
-            <Button variant="ghost" isIconOnly size="sm" onClick={handleClose} aria-label="Zatvori"><X size={16} /></Button>
           </ModalHeader>
 
           <ModalBody className="flex flex-col gap-4 py-4">

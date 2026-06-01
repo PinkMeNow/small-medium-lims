@@ -5,6 +5,9 @@ import {
   ListBox, ListBoxItem,
   SearchField, SearchFieldGroup, SearchFieldSearchIcon, SearchFieldInput, SearchFieldClearButton,
   TableRoot, TableContent, TableHeader, TableBody, TableRow, TableColumn, TableCell,
+  ModalRoot, ModalBackdrop, ModalContainer, ModalDialog,
+  ModalHeader, ModalHeading, ModalBody, ModalFooter,
+  useOverlayState,
 } from '@heroui/react'
 import { ChevronLeft, ChevronRight, Info } from 'lucide-react'
 import { useSamples, useUpdateSampleStatus } from './hooks'
@@ -24,6 +27,8 @@ const STATUS_OPTIONS = [
 
 interface Props { onRowClick?: (sample: Sample) => void }
 
+interface PendingChange { sample: Sample; newStatus: SampleStatus }
+
 export default function SamplesTable({ onRowClick }: Props) {
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState('')
@@ -31,6 +36,8 @@ export default function SamplesTable({ onRowClick }: Props) {
   const [page, setPage] = useState(1)
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({ column: 'receivedAt', direction: 'descending' })
   const [selectedKeys, setSelectedKeys] = useState<SelectionSet | 'all'>(new Set())
+  const [pendingChange, setPendingChange] = useState<PendingChange | null>(null)
+  const confirmModal = useOverlayState()
 
   const { data, isLoading, isError } = useSamples({ page, limit: 20, search, status: status || undefined })
   const updateStatus = useUpdateSampleStatus()
@@ -55,6 +62,23 @@ export default function SamplesTable({ onRowClick }: Props) {
     const eligible = selectedSamples.filter(s => ALLOWED_TRANSITIONS[s.status].includes(newStatus))
     await Promise.all(eligible.map(s => updateStatus.mutateAsync({ id: s.id, status: newStatus })))
     setSelectedKeys(new Set())
+  }
+
+  function requestStatusChange(sample: Sample, newStatus: SampleStatus) {
+    setPendingChange({ sample, newStatus })
+    confirmModal.open()
+  }
+
+  async function confirmStatusChange() {
+    if (!pendingChange) return
+    await updateStatus.mutateAsync({ id: pendingChange.sample.id, status: pendingChange.newStatus })
+    confirmModal.close()
+    setPendingChange(null)
+  }
+
+  function cancelStatusChange() {
+    confirmModal.close()
+    setPendingChange(null)
   }
 
   const total = data?.meta.total ?? 0
@@ -154,7 +178,7 @@ export default function SamplesTable({ onRowClick }: Props) {
                           <Select
                             selectedKey={null}
                             placeholder="Promijeni →"
-                            onSelectionChange={(key) => { if (key) updateStatus.mutateAsync({ id: sample.id, status: String(key) as SampleStatus }) }}
+                            onSelectionChange={(key) => { if (key) requestStatusChange(sample, String(key) as SampleStatus) }}
                           >
                             <SelectTrigger className="text-xs min-w-28"><SelectValue /><SelectIndicator /></SelectTrigger>
                             <SelectPopover>
@@ -184,6 +208,36 @@ export default function SamplesTable({ onRowClick }: Props) {
             <Button variant="outline" size="sm" isIconOnly isDisabled={page >= totalPages} onClick={() => setPage(p => p + 1)}><ChevronRight size={16} /></Button>
           </div>
         </div>
+      )}
+
+      {/* Status change confirmation modal */}
+      {pendingChange && (
+        <ModalRoot state={confirmModal}>
+          {confirmModal.isOpen && <ModalBackdrop />}
+          <ModalContainer size="sm" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
+            <ModalDialog>
+              <ModalHeader>
+                <ModalHeading>Potvrdi promjenu statusa</ModalHeading>
+              </ModalHeader>
+              <ModalBody className="py-4">
+                <p className="text-sm text-foreground">
+                  Promijeniti status uzorka{' '}
+                  <span className="font-mono font-semibold">{pendingChange.sample.code}</span>{' '}
+                  u <span className="font-medium">{SAMPLE_STATUS_LABELS[pendingChange.newStatus]}</span>?
+                </p>
+                <p className="text-xs text-muted mt-1">Ova akcija bit će zabilježena u historiji uzorka.</p>
+              </ModalBody>
+              <ModalFooter className="gap-2">
+                <Button variant="outline" onClick={cancelStatusChange} isDisabled={updateStatus.isPending}>
+                  Odustani
+                </Button>
+                <Button variant="primary" onClick={confirmStatusChange} isDisabled={updateStatus.isPending}>
+                  {updateStatus.isPending ? <Spinner size="sm" /> : 'Potvrdi'}
+                </Button>
+              </ModalFooter>
+            </ModalDialog>
+          </ModalContainer>
+        </ModalRoot>
       )}
     </div>
   )

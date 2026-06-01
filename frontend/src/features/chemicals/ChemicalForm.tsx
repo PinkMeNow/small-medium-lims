@@ -84,12 +84,11 @@ export default function ChemicalForm() {
       </Button>
 
       <ModalRoot state={modal}>
-        <ModalBackdrop />
-        <ModalContainer size="lg" className="fixed inset-0 z-50 overflow-y-auto flex flex-col p-2 sm:p-4">
+        {modal.isOpen && <ModalBackdrop />}
+        <ModalContainer size="lg" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4">
           <ModalDialog className="w-full max-w-2xl">
             <ModalHeader className="flex items-center justify-between">
               <ModalHeading>Dodaj kemikaliju</ModalHeading>
-              <Button variant="ghost" isIconOnly size="sm" onClick={modal.close} aria-label="Zatvori"><X size={16} /></Button>
             </ModalHeader>
 
             <ModalBody className="overflow-y-auto max-h-[65vh] flex flex-col gap-5 py-4">
