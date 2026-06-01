@@ -63,6 +63,13 @@
   background: transparent !important;
 }
 
+/* Table header: explicitly grey */
+[data-slot="table-header"],
+[data-slot="table-header"] tr,
+[data-slot="table-header"] [data-slot="table-row"] {
+  background-color: var(--surface-secondary) !important;
+}
+
 /* Force modal containers to cover full viewport and center content */
 [data-slot="modal-container"] {
   position: fixed !important;
