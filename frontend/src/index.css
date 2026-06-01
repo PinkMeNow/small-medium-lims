@@ -56,6 +56,28 @@
   --separator: oklch(25.00% 0.0055 248.08);
 }
 
+/* Force modal containers to cover full viewport and center content */
+[data-slot="modal-container"] {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 50 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0.5rem !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 640px) {
+  [data-slot="modal-container"] {
+    padding: 1rem !important;
+  }
+}
+
 /* Responsive tables — smaller padding + touch scroll on mobile */
 @media (max-width: 640px) {
   [data-slot="table-cell"],
