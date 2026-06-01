@@ -56,6 +56,14 @@
   --separator: oklch(25.00% 0.0055 248.08);
 }
 
+/* Table: transparent background so outer container border-radius is visible in all corners */
+[data-slot="table"],
+[data-slot="table-content"],
+[data-slot="table-header"],
+[data-slot="table-body"] {
+  background: transparent !important;
+}
+
 /* Force modal containers to cover full viewport and center content */
 [data-slot="modal-container"] {
   position: fixed !important;
