@@ -121,7 +121,7 @@ export default function SamplesTable({ onRowClick }: Props) {
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-border bg-surface">
+      <div className="rounded-xl border border-border bg-surface overflow-hidden"><div className="overflow-x-auto">
         {isLoading ? (
           <div className="flex items-center justify-center py-16"><Spinner size="lg" /></div>
         ) : isError ? (
@@ -196,7 +196,7 @@ export default function SamplesTable({ onRowClick }: Props) {
             </TableContent>
           </TableRoot>
         )}
-      </div>
+      </div></div>
 
       {/* Pagination */}
       {totalPages > 1 && (
